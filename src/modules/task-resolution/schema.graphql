@@ -1,0 +1,47 @@
+# import Error from "../../shared.graphql"
+# import Task from "../task/schema.graphql"
+# import User from "../user/schema.graphql"
+
+interface ITaskResolution {
+  id: String!
+  description: String!
+  achieved: Boolean!
+  task: Task!
+}
+
+type OnDemandTaskResolution implements ITaskResolution {
+  id: String!
+  description: String!
+  achieved: Boolean!
+  task: Task!
+}
+
+type UserApprovalTaskResolution implements ITaskResolution {
+  id: String!
+  description: String!
+  achieved: Boolean!
+  task: Task!
+  approver: User
+}
+
+type DueDateTaskResolution implements ITaskResolution {
+  id: String!
+  description: String!
+  achieved: Boolean!
+  task: Task!
+  dueDate: Float
+}
+
+type Query {
+  taskResolution(id: String!): ITaskResolution
+  taskResolutionForTask(id: String!): ITaskResolution!
+  onDemandTaskResolutions: [ITaskResolution!]
+  userApprovalTaskResolutions: [ITaskResolution!]
+  dueDateTaskResolutions: [ITaskResolution!]
+}
+
+type Mutation {
+  createOnDemandTaskResolution(taskId: String!, description: String!): [Error!]
+  createUserApprovalTaskResolution(taskId: String!, description: String!): [Error!]
+  createDueDateTaskResolution(taskId: String!, description: String!): [Error!]
+}
