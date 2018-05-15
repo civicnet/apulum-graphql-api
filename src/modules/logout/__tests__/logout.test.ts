@@ -5,7 +5,8 @@ import { createTypeormConn } from '../../../utils/createTypeormConn';
 import { User } from '../../../entity/User';
 import * as casual from 'casual';
 
-import { loginAndQueryMeTest, noCookieTest } from '../queries/queries';
+import { loginAndQueryMeTest, noCookieTest } from '../../me/queries/queries';
+import { logoutMutation } from '../queries/queries';
 
 let conn: Connection;
 let email = casual.email;
@@ -26,12 +27,20 @@ afterAll(async () => {
   conn.close();
 });
 
-describe('Me query', () => {
-  test('return null if no cookie', async() => {
-    noCookieTest(true);
-  });
-
-  test('can get current user', async() => {
+describe('Logout test', () => {
+  test("Test logging out a user", async () => {
     loginAndQueryMeTest(email, pass, userId);
+
+    await axios.post(
+      process.env.TEST_HOST as string,
+      {
+        query: logoutMutation
+      },
+      {
+        withCredentials: true
+      }
+    );
+
+    await noCookieTest(true);
   });
 });

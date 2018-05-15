@@ -1,0 +1,9 @@
+# import User from "../user/schema.graphql"
+
+type Query {
+  dummy: String
+}
+
+type Mutation {
+  logout: Boolean
+}

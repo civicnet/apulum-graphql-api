@@ -23,6 +23,7 @@ column: number;
 interface IQuery {
 __typename: "Query";
 bye2: string | null;
+dummy: string | null;
 me: IUser | null;
 bye: string | null;
 tasks: Array<ITask>;
@@ -96,6 +97,7 @@ task: ITask;
 interface IMutation {
 __typename: "Mutation";
 login: Array<IError>;
+logout: boolean | null;
 register: Array<IError>;
 createTask: Array<IError>;
 deleteTask: Array<IError>;
