@@ -1,11 +1,11 @@
 # import Error from "../../shared.graphql"
 
 type User {
-  id: String!
+  id: ID!
   email: String!
 }
 
 type Query {
   users: [User!]
-  user(id: String!): User
+  user(id: ID!): User
 }

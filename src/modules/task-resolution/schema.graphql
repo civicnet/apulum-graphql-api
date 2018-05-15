@@ -3,21 +3,21 @@
 # import User from "../user/schema.graphql"
 
 interface ITaskResolution {
-  id: String!
+  id: ID!
   description: String!
   achieved: Boolean!
   task: Task!
 }
 
 type OnDemandTaskResolution implements ITaskResolution {
-  id: String!
+  id: ID!
   description: String!
   achieved: Boolean!
   task: Task!
 }
 
 type UserApprovalTaskResolution implements ITaskResolution {
-  id: String!
+  id: ID!
   description: String!
   achieved: Boolean!
   task: Task!
@@ -25,7 +25,7 @@ type UserApprovalTaskResolution implements ITaskResolution {
 }
 
 type DueDateTaskResolution implements ITaskResolution {
-  id: String!
+  id: ID!
   description: String!
   achieved: Boolean!
   task: Task!
@@ -33,15 +33,15 @@ type DueDateTaskResolution implements ITaskResolution {
 }
 
 type Query {
-  taskResolution(id: String!): ITaskResolution
-  taskResolutionForTask(id: String!): ITaskResolution!
+  taskResolution(id: ID!): ITaskResolution
+  taskResolutionForTask(id: ID!): ITaskResolution!
   onDemandTaskResolutions: [ITaskResolution!]
   userApprovalTaskResolutions: [ITaskResolution!]
   dueDateTaskResolutions: [ITaskResolution!]
 }
 
 type Mutation {
-  createOnDemandTaskResolution(taskId: String!, description: String!): [Error!]
-  createUserApprovalTaskResolution(taskId: String!, description: String!): [Error!]
-  createDueDateTaskResolution(taskId: String!, description: String!): [Error!]
+  createOnDemandTaskResolution(taskId: ID!, description: String!): [Error!]
+  createUserApprovalTaskResolution(taskId: ID!, description: String!): [Error!]
+  createDueDateTaskResolution(taskId: ID!, description: String!): [Error!]
 }
