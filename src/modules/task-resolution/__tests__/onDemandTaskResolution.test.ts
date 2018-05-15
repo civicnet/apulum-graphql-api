@@ -4,13 +4,21 @@ import { createTypeormConn } from "../../../utils/createTypeormConn";
 import { User } from "../../../entity/User";
 import { Task } from "../../../entity/Task";
 
+import { Connection } from "typeorm";
+
 import { onDemandTaskResolutionsQuery, createOnDemandTaskResolution } from "../queries/queries";
 import { userCreation, valid_email, valid_password } from "../../user/queries/queries";
 import { creationMutation, valid_title, valid_description } from "../../task/queries/queries";
 
+let conn: Connection;
+
 beforeAll(async () => {
-  await createTypeormConn();
+ conn = await createTypeormConn();
 })
+
+afterAll(async () => {
+  conn.close();
+});
 
 // TODO: Add fail cases
 describe("On Demand Task Resolution test", () => {

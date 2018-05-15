@@ -31,9 +31,17 @@ import {
   valid_password
 } from '../../user/queries/queries';
 
+import { Connection } from 'typeorm';
+
+let conn: Connection;
+
 beforeAll(async () => {
-  await createTypeormConn();
+ conn = await createTypeormConn();
 })
+
+afterAll(async () => {
+  conn.close();
+});
 
 describe("Task management", () => {
   it("can create", async () => {

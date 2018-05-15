@@ -11,9 +11,17 @@ import {
   userQuery
 } from '../queries/queries';
 
+import { Connection } from 'typeorm';
+
+let conn: Connection;
+
 beforeAll(async () => {
-  await createTypeormConn();
+ conn = await createTypeormConn();
 })
+
+afterAll(async () => {
+  conn.close();
+});
 
 describe("User management", () => {
   it("can query users", async () => {

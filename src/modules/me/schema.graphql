@@ -1,0 +1,5 @@
+# import User from "../user/schema.graphql"
+
+type Query {
+    me: User
+}

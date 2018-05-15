@@ -17,9 +17,17 @@ import {
   loginMutation
 } from '../queries/queries';
 
+import { Connection } from 'typeorm';
+
+let conn: Connection;
+
 beforeAll(async () => {
-  await createTypeormConn();
+ conn = await createTypeormConn();
 })
+
+afterAll(async () => {
+  conn.close();
+});
 
 describe('Login user', () => {
   test('can\'t login with unknown email', async() => {

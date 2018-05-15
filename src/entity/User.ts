@@ -3,8 +3,12 @@ import {
   Column,
   BaseEntity,
   PrimaryGeneratedColumn,
-  OneToMany
+  OneToMany,
+  BeforeInsert
 } from "typeorm";
+
+import * as bcrypt from 'bcryptjs';
+
 import { Task } from "./Task";
 import { UserApprovalTaskResolution } from "./UserApprovalTaskResolution";
 
@@ -34,4 +38,9 @@ export class User extends BaseEntity {
   // @ts-ignore `type` is not being used
   @OneToMany(type => UserApprovalTaskResolution, resolution => resolution.approver)
   approvedResolutions: UserApprovalTaskResolution[];
+
+  @BeforeInsert()
+  async hashPassword() {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
 }

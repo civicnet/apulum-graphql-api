@@ -23,6 +23,7 @@ column: number;
 interface IQuery {
 __typename: "Query";
 bye2: string | null;
+me: IUser | null;
 bye: string | null;
 tasks: Array<ITask>;
 task: ITask | null;
@@ -67,6 +68,12 @@ interface IUserOnQueryArguments {
 id: string;
 }
 
+interface IUser {
+__typename: "User";
+id: string;
+email: string;
+}
+
 interface ITask {
 __typename: "Task";
 id: string;
@@ -74,12 +81,6 @@ title: string;
 description: string;
 creator: IUser;
 asignee: IUser | null;
-}
-
-interface IUser {
-__typename: "User";
-id: string;
-email: string;
 }
 
 type ITaskResolution = IOnDemandTaskResolution | IUserApprovalTaskResolution | IDueDateTaskResolution;
