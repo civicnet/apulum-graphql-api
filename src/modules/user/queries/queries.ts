@@ -11,19 +11,30 @@ export const userCreation = (e: string, p: string) => `
 `;
 
 export const usersQuery = () => `
-    query {
-      users {
-        id
-        email
-      }
+  query {
+    users {
+      id
+      email
     }
+  }
 `;
 
 export const userQuery = (id: string) => `
-    query {
-      user(id: "${id}") {
-        id
-        email
-      }
+  query {
+    user(id: "${id}") {
+      id
+      email
+      firstName
+      lastName
     }
+  }
+`;
+
+export const updateUserMutation = (id: string, firstName: string, lastName: string) => `
+  mutation {
+    updateUser(id: "${id}", firstName: "${firstName}", lastName: "${lastName}") {
+      path
+      message
+    }
+  }
 `;

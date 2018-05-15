@@ -73,6 +73,8 @@ interface IUser {
 __typename: "User";
 id: string;
 email: string;
+firstName: string | null;
+lastName: string | null;
 }
 
 interface ITask {
@@ -105,6 +107,7 @@ assignTask: Array<IError>;
 createOnDemandTaskResolution: Array<IError>;
 createUserApprovalTaskResolution: Array<IError>;
 createDueDateTaskResolution: Array<IError>;
+updateUser: Array<IError>;
 }
 
 interface ILoginOnMutationArguments {
@@ -145,6 +148,12 @@ description: string;
 interface ICreateDueDateTaskResolutionOnMutationArguments {
 taskId: string;
 description: string;
+}
+
+interface IUpdateUserOnMutationArguments {
+id: string;
+firstName?: string | null;
+lastName?: string | null;
 }
 
 interface IError {
