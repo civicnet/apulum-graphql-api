@@ -1,16 +1,18 @@
-import axios from 'axios';
-
 import { Connection } from 'typeorm';
 import { createTypeormConn } from '../../../utils/createTypeormConn';
 import { User } from '../../../entity/User';
 import * as casual from 'casual';
 
-import { loginAndQueryMeTest, noCookieTest } from '../queries/queries';
+import { TestClient } from '../../../utils/TestClient';
 
 let conn: Connection;
 let email = casual.email;
 let pass = casual.password;
 let userId: string;
+
+const client = new TestClient(
+  process.env.TEST_HOST as string
+);
 
 beforeAll(async() => {
   conn = await createTypeormConn();
@@ -27,11 +29,20 @@ afterAll(async () => {
 });
 
 describe('Me query', () => {
-  test('return null if no cookie', async() => {
-    noCookieTest(true);
+  test('Return null if no cookie', async() => {
+    const response = await client.me();
+    expect(response.data.me).toBeNull();
   });
 
-  test('can get current user', async() => {
-    loginAndQueryMeTest(email, pass, userId);
+  test('Can get current user', async() => {
+    await client.login(email, pass);
+    const response = await client.me();
+
+    expect(response.data).toEqual({
+      me: {
+        email: email,
+        id: userId
+      }
+    })
   });
 });

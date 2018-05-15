@@ -13,11 +13,8 @@ import {
   userCreation
 } from '../../user/queries/queries';
 
-import {
-  loginMutation
-} from '../queries/queries';
-
 import { Connection } from 'typeorm';
+import { TestClient } from '../../../utils/TestClient';
 
 let conn: Connection;
 
@@ -31,12 +28,12 @@ afterAll(async () => {
 
 describe('Login user', () => {
   test('can\'t login with unknown email', async() => {
-    const response = await request(
-      process.env.TEST_HOST as string,
-      loginMutation(valid_email, valid_password)
+    const client = new TestClient(
+      process.env.TEST_HOST as string
     );
+    const response = await client.login(valid_email, valid_password);
 
-    expect(response).toEqual({
+    expect(response.data).toEqual({
       login: [
         {
           path: 'login',
@@ -52,12 +49,12 @@ describe('Login user', () => {
       userCreation(valid_email, valid_password)
     );
 
-    const response = await request(
-      process.env.TEST_HOST as string,
-      loginMutation(valid_email, valid_password)
+    const client = new TestClient(
+      process.env.TEST_HOST as string
     );
+    const response = await client.login(valid_email, valid_password);
 
-    expect(response).toEqual({
+    expect(response.data).toEqual({
       login: [{
         path: 'login',
         message: confirmEmailError
@@ -68,21 +65,21 @@ describe('Login user', () => {
   test('can login', async() => {
     await User.update({ email: valid_email }, { confirmed: true });
 
-    const response = await request(
-      process.env.TEST_HOST as string,
-      loginMutation(valid_email, valid_password)
+    const client = new TestClient(
+      process.env.TEST_HOST as string
     );
+    const response = await client.login(valid_email, valid_password);
 
-    expect(response).toEqual({ login: null });
+    expect(response.data).toEqual({ login: null });
   });
 
   test('can\'t login with bad password', async() => {
-    const response = await request(
-      process.env.TEST_HOST as string,
-      loginMutation(valid_email, 'a')
+    const client = new TestClient(
+      process.env.TEST_HOST as string
     );
+    const response = await client.login(valid_email, 'a');
 
-    expect(response).toEqual({
+    expect(response.data).toEqual({
       login: [
         {
           path: 'login',
