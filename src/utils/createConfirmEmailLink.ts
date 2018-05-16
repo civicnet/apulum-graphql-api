@@ -8,7 +8,9 @@ export const createConfirmEmailLink = async (
   redis: Redis
 ) => {
   const id = v4();
+  console.log("Setting id " + id + " for " + userId);
   await redis.set(id, userId, 'ex', 60*60*24);
 
-  return `${url}/confirm/${id}`;
+  let finalUrl = `${url}/confirm/${id}`;
+  return finalUrl;
 }

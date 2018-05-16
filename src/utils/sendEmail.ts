@@ -2,6 +2,7 @@ import * as SparkPost from 'sparkpost';
 
 export const sendEmail = async (recipient: string, url: string) => {
   const client = new SparkPost(process.env.SPARKPOST_API_KEY);
+  console.log("Sending email with key " + process.env.SPARKPOST_API_KEY);
   const response = await client.transmissions.send({
     options: {
       sandbox: true
@@ -22,5 +23,5 @@ export const sendEmail = async (recipient: string, url: string) => {
     recipients: [{ address: recipient }]
   });
 
-  console.log(response);
+  console.log("Sent ", response);
 };
