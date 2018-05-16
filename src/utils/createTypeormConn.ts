@@ -2,6 +2,7 @@ import { createConnection, getConnectionOptions } from "typeorm";
 
 export const createTypeormConn = async () => {
     const connectionOptions = await getConnectionOptions(process.env.NODE_ENV);
+
     if (process.env.NODE_ENV === 'production') {
       Object.assign(connectionOptions, {
         host: process.env.DB_HOST,
@@ -12,5 +13,6 @@ export const createTypeormConn = async () => {
         logging: process.env.DB_DEBUG,
       });
     }
+    // console.log(connectionOptions);
     return await createConnection({ ...connectionOptions, name: "default" });
 }
