@@ -7,3 +7,4 @@ temp/
 *.swp
 .env
 coverage/
+dist/

@@ -47,6 +47,12 @@
     humps "^2.0.0"
     typescript "^2.2.2"
 
+"@gql2ts/types@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@gql2ts/types/-/types-1.8.0.tgz#ee20fa55b157352b4a96ba647c1d3e1c0b0b4184"
+  dependencies:
+    "@gql2ts/util" "^1.8.0"
+
 "@gql2ts/util@^1.8.0":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@gql2ts/util/-/util-1.8.0.tgz#23612425b43ba1a6534e7783137276f4f567a417"
@@ -162,9 +168,13 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*", "@types/node@^10.0.4":
+"@types/node@*":
   version "10.0.4"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.0.4.tgz#130598ee56e9a1210a53f557d64935571f05390d"
+
+"@types/node@^10.1.0":
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.1.0.tgz#2783ee1b6c47cbd4044f4a233976c1ac5fa9e942"
 
 "@types/node@^9.4.6":
   version "9.6.12"
@@ -215,6 +225,13 @@
   version "3.4.3"
   resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-3.4.3.tgz#121ace265f5569ce40f4f6d0ff78a338c732a754"
   dependencies:
+    "@types/node" "*"
+
+"@types/ws@^5.1.1":
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/@types/ws/-/ws-5.1.1.tgz#4adc1f1a5e92e7e0e95658fb35c7eab1bc52f4ac"
+  dependencies:
+    "@types/events" "*"
     "@types/node" "*"
 
 "@types/yup@^0.24.3":
@@ -4633,7 +4650,7 @@ ts-jest@^22.4.5:
     pkg-dir "^2.0.0"
     yargs "^11.0.0"
 
-ts-node@6.0.3:
+ts-node@^6.0.3:
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-6.0.3.tgz#28bf74bcad134fad17f7469dad04638ece03f0f4"
   dependencies:
@@ -4722,7 +4739,7 @@ typeorm@0.2.5:
     yargonaut "^1.1.2"
     yargs "^11.1.0"
 
-typescript@2.8.3, typescript@^2.2.2:
+typescript@^2.2.2, typescript@^2.8.3:
   version "2.8.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.8.3.tgz#5d817f9b6f31bb871835f4edf0089f21abe6c170"
 
