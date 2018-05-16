@@ -12,6 +12,8 @@ type Query {
   user(id: ID!): User
 }
 
+union MaybeUser = Error | User
+
 type Mutation {
-  updateUser(id: ID!, firstName: String, lastName: String): [Error!]
+  updateUser(id: ID!, firstName: String, lastName: String): [MaybeUser!]
 }

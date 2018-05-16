@@ -74,7 +74,12 @@ describe("User management", () => {
       updateUserMutation(user.id, newFirstName, newLastName)
     );
 
-    expect(response.updateUser).toBeNull();
+    expect(response.updateUser).toEqual([{
+      id: user.id,
+      email: valid_email,
+      firstName: newFirstName,
+      lastName: newLastName
+    }]);
 
     const updatedResponse: any = await request(
       process.env.TEST_HOST as string,

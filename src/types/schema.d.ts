@@ -107,7 +107,7 @@ assignTask: Array<IError>;
 createOnDemandTaskResolution: Array<IError>;
 createUserApprovalTaskResolution: Array<IError>;
 createDueDateTaskResolution: Array<IError>;
-updateUser: Array<IError>;
+updateUser: Array<MaybeUser>;
 }
 
 interface ILoginOnMutationArguments {
@@ -161,6 +161,10 @@ __typename: "Error";
 path: string;
 message: string;
 }
+
+type MaybeUser = IError | IUser;
+
+
 
 interface IOnDemandTaskResolution {
 __typename: "OnDemandTaskResolution";

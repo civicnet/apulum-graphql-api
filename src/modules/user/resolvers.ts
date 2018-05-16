@@ -16,6 +16,15 @@ const schema = yup.object().shape({
 });
 
 export const resolvers: ResolverMap = {
+  MaybeUser: {
+    __resolveType: (obj) => {
+      if (obj.path) {
+        return 'Error';
+      }
+
+      return 'User';
+    },
+  },
   Query: {
     users: async () => {
       return await getRepository(User)
@@ -57,8 +66,7 @@ export const resolvers: ResolverMap = {
       }
 
       await user.save();
-
-      return null;
+      return [user];
     }
   }
 }

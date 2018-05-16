@@ -33,8 +33,16 @@ export const userQuery = (id: string) => `
 export const updateUserMutation = (id: string, firstName: string, lastName: string) => `
   mutation {
     updateUser(id: "${id}", firstName: "${firstName}", lastName: "${lastName}") {
-      path
-      message
+      ... on Error {
+        path
+        message
+      }
+      ... on User {
+        id
+        email
+        firstName
+        lastName
+      }
     }
   }
 `;
