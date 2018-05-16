@@ -39,7 +39,7 @@ export const startServer = async () => {
         name: 'uid',
         secret: process.env.SESSION_SECRET as string,
         resave: true,
-        saveUninitialized: false,
+        saveUninitialized: true,
         cookie: {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
