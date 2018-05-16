@@ -57,7 +57,7 @@
       "yup": "^0.24.1"
    },
    "scripts": {
-      "start": "ts-node src/index.ts",
+      "start": "cd dist/ && node index.js",
       "dev": "NODE_ENV=development nodemon --exec ts-node src/index.ts",
       "gen-schema-types": "ts-node src/scripts/createTypes.ts",
       "test": "NODE_ENV=test jest --watch --runInBand",

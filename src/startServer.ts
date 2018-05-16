@@ -54,11 +54,12 @@ export const startServer = async () => {
     server.express.get('/confirm/:id', confirmEmail);
 
     await createTypeormConn();
+    const port = process.env.PORT || 4000;
     const app = await server.start({
       cors,
-      port: process.env.NODE_ENV === 'test' ? 0 : process.env.PORT
+      port: process.env.NODE_ENV === 'test' ? 0 : port
     });
 
-    console.log('Server is running on localhost:' + process.env.PORT);
+    console.log('Server is running on localhost:' + port);
     return app;
 }
