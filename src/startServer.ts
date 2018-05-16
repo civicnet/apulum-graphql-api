@@ -26,6 +26,10 @@ export const startServer = async () => {
       })
     });
 
+    if (process.env.NODE_ENV === 'production') {
+      server.express.set('trust proxy', 1);
+    }
+
     server.express.use(
       session({
         store: new RedisStore({
@@ -33,7 +37,7 @@ export const startServer = async () => {
           prefix: redisSessionPrefix,
         }),
         name: 'uid',
-        secret: 'developmentsecret',
+        secret: process.env.SESSION_SECRET as string,
         resave: false,
         saveUninitialized: false,
         cookie: {

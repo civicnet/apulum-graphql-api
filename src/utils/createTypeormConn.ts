@@ -13,6 +13,6 @@ export const createTypeormConn = async () => {
         logging: process.env.DB_DEBUG,
       });
     }
-    // console.log(connectionOptions);
+
     return await createConnection({ ...connectionOptions, name: "default" });
 }
