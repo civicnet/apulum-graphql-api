@@ -55,7 +55,7 @@ export const resolvers: ResolverMap = {
       await user.save();
 
       if (process.env.NODE_ENV !== 'test') {
-        console.log("Sending " + url + " to " + user.id);
+        // console.log("Sending " + url + " to " + user.id);
         sendEmail(
           email,
           await createConfirmEmailLink(url, user.id, redis)

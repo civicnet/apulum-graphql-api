@@ -1,14 +1,12 @@
-import * as SparkPost from 'sparkpost';
+import * as sgMail from '@sendgrid/mail';
 
 export const sendEmail = async (recipient: string, url: string) => {
-  const client = new SparkPost(process.env.SPARKPOST_API_KEY);
-  console.log("Sending email with key " + process.env.SPARKPOST_API_KEY);
-  const response = await client.transmissions.send({
-    options: {
-      sandbox: true
-    },
-    content: {
-      from: 'testing@sparkpostbox.com',
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');
+  // const client = new SparkPost(process.env.SPARKPOST_API_KEY);
+  // console.log("Sending email with key " + process.env.SPARKPOST_API_KEY);
+  /* const response = */ sgMail.send({
+      to: recipient,
+      from: 'testing@karman-graphql-api.ro',
       subject: 'Confirm account link',
       html: `
         <html>
@@ -20,8 +18,7 @@ export const sendEmail = async (recipient: string, url: string) => {
         </html>
       `
     },
-    recipients: [{ address: recipient }]
-  });
+  );
 
-  console.log("Sent ", response);
+  // console.log("Sent ", response);
 };
