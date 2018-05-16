@@ -38,7 +38,7 @@ export const resolvers: ResolverMap = {
 
       const user = await User.findOne({
         where: { id: id },
-        select: ['id', 'firstName', 'lastName']
+        select: ['id', 'email', 'firstName', 'lastName']
       });
 
       if (!user) {
