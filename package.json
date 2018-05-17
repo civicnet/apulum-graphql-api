@@ -59,7 +59,7 @@
       "start": "NODE_ENV=production cd dist/ && node index.js",
       "dev": "NODE_ENV=development nodemon --exec ts-node src/index.ts",
       "gen-schema-types": "ts-node src/scripts/createTypes.ts",
-      "test": "NODE_ENV=test jest --watch --runInBand",
+      "test": "NODE_ENV=test jest --watchAll --runInBand",
       "build-ts": "tsc",
       "postinstall": "yarn run build-ts && yarn copyfiles -u 1 src/shared.graphql src/modules/**/*.graphql dist"
    },
