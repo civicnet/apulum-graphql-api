@@ -55,7 +55,7 @@ PORT=YOUR_PORT
 ### Run locally
 
 ```
-$> yarn start 
+$> yarn dev 
 ```
 
 This is just the backend API, but it comes with a GraphQL playground at `https://localhost:4000`.
