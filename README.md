@@ -1,3 +1,5 @@
+[![Heroku](https://heroku-badge.herokuapp.com/?app=karman-graphql-api&style=flat)](https://karman-graphql-api.herokuapp.com/)
+
 # Kármán API
 
 Just a codename.
