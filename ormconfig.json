@@ -47,11 +47,6 @@
   {
     "name": "test",
     "type": "postgres",
-    "host": "localhost",
-    "port": 5432,
-    "username": "claudiu",
-    "password": "claudiu",
-    "database": "apulum-graphql-api-test",
     "synchronize": true,
     "logging": false,
     "dropSchema": true,

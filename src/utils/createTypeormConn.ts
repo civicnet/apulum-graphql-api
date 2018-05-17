@@ -3,7 +3,7 @@ import { createConnection, getConnectionOptions } from "typeorm";
 export const createTypeormConn = async () => {
     const connectionOptions = await getConnectionOptions(process.env.NODE_ENV);
 
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
       Object.assign(connectionOptions, {
         host: process.env.DB_HOST,
         port: process.env.DB_PORT,
