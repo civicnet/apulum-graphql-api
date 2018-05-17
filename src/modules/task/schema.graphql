@@ -17,8 +17,10 @@ type Query {
   upForGrabsTasks: [Task!]
 }
 
+union MaybeTask = Error | Task
+
 type Mutation {
-  createTask(userId: ID!, title: String!, description: String!): [Error!]
+  createTask(userId: ID!, title: String!, description: String!): [MaybeTask!]
   deleteTask(id: ID!): [Error!]
   assignTask(taskId: ID!, userId: ID!): [Error!]
 }

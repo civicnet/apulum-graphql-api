@@ -4,8 +4,15 @@ export const valid_description = "Description for days here, quite a long one";
 export const creationMutation = (u: string, t: string, d: string) => `
 mutation {
   createTask(userId: "${u}", title: "${t}", description: "${d}") {
-    path
-    message
+    ... on Error {
+      path
+      message
+    }
+    ... on Task {
+      id
+      title
+      description
+    }
   }
 }
 `;

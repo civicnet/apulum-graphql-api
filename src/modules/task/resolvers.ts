@@ -32,6 +32,15 @@ const schema = yup.object().shape({
 });
 
 export const resolvers: ResolverMap = {
+  MaybeTask: {
+    __resolveType: (obj) => {
+      if (obj.path) {
+        return 'Error';
+      }
+
+      return 'Task';
+    },
+  },
   Query: {
     tasks: async () => {
       const tasks = await getRepository(Task)
@@ -85,13 +94,13 @@ export const resolvers: ResolverMap = {
         }]
       }
 
-      await Task.create({
+      let task = await Task.create({
         creator: creator,
         title: title,
         description: description,
       }).save();
 
-      return null;
+      return [task];
     },
     deleteTask: async (_, { id }: GQL.IDeleteTaskOnMutationArguments) => {
       const task = await Task.findOne({

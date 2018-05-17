@@ -55,7 +55,12 @@ describe("Task management", () => {
       process.env.TEST_HOST as string,
       creationMutation(actualUsers[0].id, valid_title, valid_description)
     );
-    expect(response).toEqual({ createTask: null });
+    expect(response).toMatchObject({
+      createTask: [{
+        description: valid_description,
+        title: valid_title
+      }]
+    });
 
     // TODO: should probably return success here (implement union type for Error | Success)
     const tasks = await Task.find({ where: { title: valid_title }});
