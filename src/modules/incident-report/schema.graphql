@@ -1,0 +1,142 @@
+# import Error from "../../shared.graphql"
+# import User from "../user/schema.graphql"
+
+"A broad list of incident report types in the city"
+enum IncidentReportType {
+  OTHER
+  PARKING
+  TRASH
+}
+
+"The status of the report, as marked by the city representatives"
+enum IncidentReportStatus {
+  NEW
+  TRIAGED
+  SOLVED
+  DENIED
+}
+
+"""
+A comment can be made by either citizens, or city representatives. It doesn't
+have to have an actual text comment if it updates the status, and it doesn't
+have to have a status update if it has a text comment.
+"""
+type IncidentReportComment {
+  id: ID!
+  creator: User!
+  incidentReport: IncidentReport!
+  comment: String
+  """
+  The old status (before the comment was made) and the new status (after the comment was made).
+  Can be null if a change to the status wasn't made.
+  """
+  oldStatus: IncidentReportStatus
+  newStatus: IncidentReportStatus
+}
+
+"""
+An incident report is usually made by citizens, reporting an issue in the city. They can describe it,
+add a short title and place a marker on the map in order to localize it. Each report can have multiple
+comments from city representatives, other citizens or themselves and each report has a status that
+describes the report's current state.
+"""
+type IncidentReport {
+  id: ID!
+  creator: User
+  description: String!
+  title: String!
+  "The latitude is stored in the DB with a 1m precision, which should suffice for any city report"
+  latitude: Float!
+  "The longitude is stored in the DB with a 1m precision, which should suffice for any city report"
+  longitude: Float!
+  type: IncidentReportType
+  status: IncidentReportStatus
+  comments: [IncidentReportComment]
+}
+
+"""
+We use the same input for both updates and creations of incident reports so the only mandatory field
+is userId. For the rest, it depends on the mutation being performed.
+
+TODO: Group latitude and longitude into a separate mandatory input. There is no use case for updating
+just the longitude or the latitude.
+"""
+input IncidentReportInput {
+  description: String
+  title: String
+  latitude: Float
+  longitude: Float
+  type: IncidentReportType
+  userId: ID!
+}
+
+"""
+If the status for an incident report is being updated, we only care for the new status and who
+made the update, we can fetch the old status from the report.
+"""
+input IncidentReportStatusChangeInput {
+  newStatus: IncidentReportStatus
+  userID: ID!
+}
+
+"""
+Creating a new comment should contain other a text comment, or a status change, or both.
+"""
+input IncidentReportCommentInput {
+  userID: ID!
+  incidentReportID: ID!
+  comment: String
+  statusChange: IncidentReportStatusChangeInput
+}
+
+union MaybeIncidentReportComment = IncidentReportComment | Error
+union MaybeIncidentReport = Error | IncidentReport
+
+type Mutation {
+  "Create a brand new incident report. Can be done by either citizens or city representatives"
+  createIncidentReport(
+    input: IncidentReportInput!
+  ): [MaybeIncidentReport!]
+
+  "Update any fields on an existing report"
+  updateIncidentReport(
+    id: ID!,
+    input: IncidentReportInput!
+  ): [MaybeIncidentReport!]
+
+  "Update a report status and create a new comment with the change"
+  changeIncidentReportStatus(
+    id: ID!,
+    input: IncidentReportStatusChangeInput!
+  ): [MaybeIncidentReport!]
+
+  "Add a comment, or a status update, to a report"
+  createIncidentReportComment(
+    input: IncidentReportCommentInput!
+  ): [MaybeIncidentReportComment!]
+
+  "Update a report comment, or status update"
+  updateIncidentReportComment(
+    id: ID!,
+    input: IncidentReportCommentInput!
+  ): [MaybeIncidentReportComment!]
+}
+
+type Query {
+  "List all incident reports in the system"
+  incidentReports: [IncidentReport!]
+
+  "Query for a single incident report"
+  incidentReport(id: ID!): IncidentReport
+
+  "List all of the comments for a specific incident report"
+  commentsForIncidentReport(
+    incidentReportID: ID!
+  ): [IncidentReportComment!]
+
+  "Query for a single incident report comment"
+  incidentReportComment(
+    id: ID!
+  ): IncidentReportComment
+}
+

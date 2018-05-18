@@ -11,6 +11,8 @@ import * as bcrypt from 'bcryptjs';
 
 import { Task } from "./Task";
 import { UserApprovalTaskResolution } from "./UserApprovalTaskResolution";
+import { IncidentReport } from "./IncidentReport";
+import { IncidentReportComment } from "./IncidentReportComment";
 
 @Entity("users")
 export class User extends BaseEntity {
@@ -38,8 +40,16 @@ export class User extends BaseEntity {
   tasks: Task[];
 
   // @ts-ignore `type` is not being used
+  @OneToMany(type => IncidentReport, incident => incident.creator)
+  incidents: IncidentReport[];
+
+  // @ts-ignore `type` is not being used
   @OneToMany(type => Task, task => task.asignee)
   asignedTasks: Task[];
+
+  // @ts-ignore `type` is not being used
+  @OneToMany(type => IncidentReportComment, comment => comment.creator)
+  incidentAttachments: IncidentReportComment[];
 
   // @ts-ignore `type` is not being used
   @OneToMany(type => UserApprovalTaskResolution, resolution => resolution.approver)
