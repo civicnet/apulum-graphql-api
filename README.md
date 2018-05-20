@@ -1,4 +1,5 @@
 [![Heroku](https://heroku-badge.herokuapp.com/?app=karman-graphql-api&style=flat)](https://karman-graphql-api.herokuapp.com/)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fcivictechro%2Fapulum-graphql-api.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fcivictechro%2Fapulum-graphql-api?ref=badge_shield)
 
 # Kármán API
 
@@ -147,3 +148,7 @@ Depending on your workflow, you should be able to use this to deploy. Please fee
 ----------
 
 **Made with :heart: & :coffee: by [CivicTech România](https://civictech.ro/)**
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fcivictechro%2Fapulum-graphql-api.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fcivictechro%2Fapulum-graphql-api?ref=badge_large)
