@@ -143,6 +143,21 @@ The postinstall step builds the `.ts` files and copies static assets (`*.graphql
 
 Depending on your workflow, you should be able to use this to deploy. Please feel free to write automation for this. 
 
+**Known issues**
+```
+(node:21536) UnhandledPromiseRejectionWarning: QueryFailedError: function uuid_generate_v4() does not exist
+
+$ sudo -u postgres psql
+psql (10.4 (Ubuntu 10.4-0ubuntu0.18.04))
+Type "help" for help.
+
+postgres=# \c apulum-graphql-api
+You are now connected to database "apulum-graphql-api" as user "postgres".
+apulum-graphql-api=# CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION
+apulum-graphql-api=# \q
+```
+
 
 ----------
 
