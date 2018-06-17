@@ -22,6 +22,7 @@ column: number;
 
 interface IQuery {
 __typename: "Query";
+dummy3: string | null;
 
 /**
  * List all incident reports in the system
@@ -125,7 +126,7 @@ latitude: number;
 longitude: number;
 type: IncidentReportType | null;
 status: IncidentReportStatus | null;
-comments: Array<IIncidentReportComment>;
+comments: Array<IIncidentReportComment> | null;
 }
 
 interface IUser {
@@ -143,7 +144,7 @@ lastName: string | null;
 OTHER = 'OTHER',
 PARKING = 'PARKING',
 TRASH = 'TRASH'
-}
+};
 
 /**
  * The status of the report, as marked by the city representatives
@@ -153,7 +154,7 @@ NEW = 'NEW',
 TRIAGED = 'TRIAGED',
 SOLVED = 'SOLVED',
 DENIED = 'DENIED'
-}
+};
 
 /**
  * A comment can be made by either citizens, or city representatives. It doesn't
@@ -196,6 +197,8 @@ task: ITask;
 
 interface IMutation {
 __typename: "Mutation";
+sendForgotPasswordEmail: boolean | null;
+forgotPasswordChange: Array<IError>;
 
 /**
  * Create a brand new incident report. Can be done by either citizens or city representatives
@@ -231,6 +234,15 @@ createOnDemandTaskResolution: Array<IError>;
 createUserApprovalTaskResolution: Array<IError>;
 createDueDateTaskResolution: Array<IError>;
 updateUser: Array<MaybeUser>;
+}
+
+interface ISendForgotPasswordEmailOnMutationArguments {
+email: string;
+}
+
+interface IForgotPasswordChangeOnMutationArguments {
+newPassword: string;
+key: string;
 }
 
 interface ICreateIncidentReportOnMutationArguments {
@@ -302,10 +314,16 @@ firstName?: string | null;
 lastName?: string | null;
 }
 
+interface IError {
+__typename: "Error";
+path: string;
+message: string;
+}
+
 /**
  * We use the same input for both updates and creations of incident reports so the only mandatory field
 * is userId. For the rest, it depends on the mutation being performed.
-*
+* 
 * TODO: Group latitude and longitude into a separate mandatory input. There is no use case for updating
 * just the longitude or the latitude.
  */
@@ -321,12 +339,6 @@ userId: string;
 type MaybeIncidentReport = IError | IIncidentReport;
 
 
-
-interface IError {
-__typename: "Error";
-path: string;
-message: string;
-}
 
 /**
  * If the status for an incident report is being updated, we only care for the new status and who
