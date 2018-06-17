@@ -4,7 +4,7 @@ import {
   BaseEntity,
   PrimaryGeneratedColumn,
   OneToMany,
-  BeforeInsert
+  BeforeInsert,
 } from "typeorm";
 
 import * as bcrypt from 'bcryptjs';
@@ -35,6 +35,9 @@ export class User extends BaseEntity {
   @Column("boolean", { default: false })
   confirmed: boolean;
 
+  @Column("boolean", { default: false })
+  forgotPasswordLocked: boolean
+
   // @ts-ignore `type` is not being used
   @OneToMany(type => Task, task => task.creator)
   tasks: Task[];
@@ -56,7 +59,7 @@ export class User extends BaseEntity {
   approvedResolutions: UserApprovalTaskResolution[];
 
   @BeforeInsert()
-  async hashPassword() {
+  async hashPasswordBeforeInsert() {
     this.password = await bcrypt.hash(this.password, 10);
   }
 }
