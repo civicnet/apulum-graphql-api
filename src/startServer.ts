@@ -17,17 +17,21 @@ import { redisSessionPrefix } from "./constants";
 const RedisStore = connectRedis(session);
 
 export const startServer = async () => {
+  if (process.env.NODE_ENV === "test") {
+    await redis.flushall();
+  }
 
-    const server = new GraphQLServer({
-      schema: genSchema(),
-      context: ({ request }) => ({
-        redis,
-        url: request.protocol + '://' + request.get('host'),
-        session: request.session,
-        req: request
-      })
-    });
+  const server = new GraphQLServer({
+    schema: genSchema(),
+    context: ({ request }) => ({
+      redis,
+      url: request.protocol + '://' + request.get('host'),
+      session: request.session,
+      req: request
+    })
+  });
 
+  if (process.env.NODE_ENV === 'production') {
     server.express.use(
       new RateLimit({
         windowMs: 15*60*1000,
@@ -38,46 +42,54 @@ export const startServer = async () => {
         })
       })
     );
+  }
 
-    // For Heroku
-    if (process.env.NODE_ENV === 'production') {
-      server.express.set('trust proxy', 1);
-    }
+  // For Heroku
+  if (process.env.NODE_ENV === 'production') {
+    server.express.set('trust proxy', 1);
+  }
 
-    server.express.use(
-      session({
-        store: new RedisStore({
-          client: redis as any,
-          prefix: redisSessionPrefix,
-        }),
-        name: 'uid',
-        secret: process.env.SESSION_SECRET as string,
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          maxAge: 1000 * 60 * 60 * 24 * 7
-        }
-      })
-    );
+  server.express.use(
+    session({
+      store: new RedisStore({
+        client: redis as any,
+        prefix: redisSessionPrefix,
+      }),
+      name: 'uid',
+      secret: process.env.SESSION_SECRET as string,
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 1000 * 60 * 60 * 24 * 7
+      }
+    })
+  );
 
-    const cors = {
-      credentials: true,
-      origin: process.env.NODE_ENV === "test"
-        ? "*"
-        : (process.env.FRONTEND_HOST as string)
-    };
+  const cors = {
+    credentials: true,
+    origin: process.env.NODE_ENV === "test"
+      ? "*"
+      : (process.env.FRONTEND_HOST as string)
+  };
 
-    server.express.get('/confirm/:id', confirmEmail);
+  server.express.get('/confirm/:id', confirmEmail);
 
-    await createTypeormConn();
-    const port = process.env.PORT || 4000;
-    const app = await server.start({
-      cors,
-      port: process.env.NODE_ENV === 'test' ? 0 : port
+  if (process.env.NODE_ENV === "test") {
+    await createTypeormConn({
+      resetDB: true,
     });
+  } else {
+    await createTypeormConn();
+  }
 
-    console.log('Server is running on localhost:' + port);
-    return app;
+  const port = process.env.PORT || 4000;
+  const app = await server.start({
+    cors,
+    port: process.env.NODE_ENV === 'test' ? 0 : port
+  });
+
+  console.log('Server is running on localhost:' + port);
+  return app;
 }

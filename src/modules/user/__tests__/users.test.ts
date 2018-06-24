@@ -1,25 +1,19 @@
-import { request } from 'graphql-request';
-
 import { User } from '../../../entity/User';
-import { createTypeormConn } from '../../../utils/createTypeormConn';
 
 import * as casual from 'casual';
 
-import {
-  userCreation,
-  valid_email,
-  valid_password,
-  usersQuery,
-  userQuery,
-  updateUserMutation
-} from '../queries/queries';
-
 import { Connection } from 'typeorm';
+import { createTypeormConn } from '../../../utils/createTypeormConn';
+import { TestClient } from '../../../utils/TestClient';
 
 let conn: Connection;
+let client: TestClient;
 
 beforeAll(async () => {
- conn = await createTypeormConn();
+  conn = await createTypeormConn();
+  client = new TestClient(
+    process.env.TEST_HOST as string
+  );
 })
 
 afterAll(async () => {
@@ -28,65 +22,56 @@ afterAll(async () => {
 
 describe("User management", () => {
   it("Can query users", async () => {
-    await request(
-      process.env.TEST_HOST as string,
-      userCreation(valid_email, valid_password)
-    );
+    const email = casual.email;
+    const password = casual.password;
 
-    const response: any = await request(
-      process.env.TEST_HOST as string,
-      usersQuery()
-    );
+    // Make sure we at least register one user
+    await client.register(email, password);
+    const response = await client.users();
 
-    expect(response.users).toHaveLength(1);
+    expect(response.data.users.length).toBeGreaterThanOrEqual(1);
   });
 
   it("Can query specific user", async () => {
-    const actualUsers = await User.find({ where: { valid_email }});
+    const email = casual.email;
+    const password = casual.password;
+
+    await client.register(email, password);
+    const actualUsers = await User.find({ where: { email }});
     expect(actualUsers).toHaveLength(1);
 
     const user = actualUsers[0];
-    const response: any = await request(
-      process.env.TEST_HOST as string,
-      userQuery(user.id)
-    );
-
-    expect(response.user.email).toEqual(valid_email);
+    const response = await client.user(user.id);
+    expect(response.data.user.email).toEqual(email);
   });
 
   it("Can update user", async () => {
-    const actualUsers = await User.find({ where: { valid_email }});
+    const email = casual.email;
+    const password = casual.password;
+
+    await client.register(email, password);
+    const actualUsers = await User.find({ where: { email }});
     expect(actualUsers).toHaveLength(1);
 
     const user = actualUsers[0];
-    const beforeResponse: any = await request(
-      process.env.TEST_HOST as string,
-      userQuery(user.id)
-    );
+    const beforeResponse = await client.user(user.id);
 
-    expect(beforeResponse.user.firstName).toBeNull();
-    expect(beforeResponse.user.lastName).toBeNull();
+    expect(beforeResponse.data.user.firstName).toBeNull();
+    expect(beforeResponse.data.user.lastName).toBeNull();
 
     let newFirstName = casual.first_name;
     let newLastName = casual.last_name;
-    const response: any = await request(
-      process.env.TEST_HOST as string,
-      updateUserMutation(user.id, newFirstName, newLastName)
-    );
 
-    expect(response.updateUser).toEqual([{
+    const response = await client.updateUser(user.id, newFirstName, newLastName);
+    expect(response.data.updateUser).toEqual([{
       id: user.id,
-      email: valid_email,
+      email: email,
       firstName: newFirstName,
       lastName: newLastName
     }]);
 
-    const updatedResponse: any = await request(
-      process.env.TEST_HOST as string,
-      userQuery(user.id)
-    );
-
-    expect(updatedResponse.user.firstName).toEqual(newFirstName);
-    expect(updatedResponse.user.lastName).toEqual(newLastName);
+    const updatedResponse: any = await client.user(user.id);
+    expect(updatedResponse.data.user.firstName).toEqual(newFirstName);
+    expect(updatedResponse.data.user.lastName).toEqual(newLastName);
   });
 });
