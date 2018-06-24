@@ -140,21 +140,21 @@ lastName: string | null;
 /**
  * A broad list of incident report types in the city
  */
-  enum IncidentReportType {
+enum IncidentReportType {
 OTHER = 'OTHER',
 PARKING = 'PARKING',
 TRASH = 'TRASH'
-};
+}
 
 /**
  * The status of the report, as marked by the city representatives
  */
-  enum IncidentReportStatus {
+enum IncidentReportStatus {
 NEW = 'NEW',
 TRIAGED = 'TRIAGED',
 SOLVED = 'SOLVED',
 DENIED = 'DENIED'
-};
+}
 
 /**
  * A comment can be made by either citizens, or city representatives. It doesn't
@@ -323,7 +323,7 @@ message: string;
 /**
  * We use the same input for both updates and creations of incident reports so the only mandatory field
 * is userId. For the rest, it depends on the mutation being performed.
-* 
+*
 * TODO: Group latitude and longitude into a separate mandatory input. There is no use case for updating
 * just the longitude or the latitude.
  */

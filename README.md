@@ -158,6 +158,13 @@ CREATE EXTENSION
 apulum-graphql-api=# \q
 ```
 
+Error running `tsc` or `yarn run build-ts`:
+
+```
+src/types/schema.d.ts(147,2): error TS1036: Statements are not allowed in ambient contexts.
+```
+
+There's a problem with the script that generates the typings for the graphql schemas, it adds an unnecessary semicolon following enum declarations. Remove them and you're good to go.
 
 ----------
 
