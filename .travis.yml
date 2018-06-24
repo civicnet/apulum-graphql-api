@@ -6,6 +6,7 @@ services:
   - redis-server
 before_script:
   - cp .env_sample .env
+  - psql -c 'apulum-graphql-api;' -U postgres
 node_js:
   - 10.0.0
 install:
