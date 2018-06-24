@@ -1,4 +1,3 @@
-import { request } from 'graphql-request';
 import * as casual from 'casual';
 
 import { User } from '../../../entity/User';

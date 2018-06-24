@@ -1,4 +1,3 @@
-import request from "graphql-request";
 import * as casual from 'casual';
 
 import { User } from "../../../entity/User";
@@ -6,7 +5,6 @@ import { Task } from "../../../entity/Task";
 
 import { Connection } from "typeorm";
 
-import { onDemandTaskResolutionsQuery, createOnDemandTaskResolution } from "../queries/queries";
 import { createTypeormConn } from "../../../utils/createTypeormConn";
 import { TestClient } from "../../../utils/TestClient";
 
