@@ -63,7 +63,7 @@
       "dev": "NODE_ENV=development nodemon --exec ts-node src/index.ts",
       "gen-schema-types": "ts-node src/scripts/createTypes.ts",
       "test": "NODE_ENV=test jest --watch",
-      "test-ci": "NODE_ENV=test jest --ci",
+      "test-ci": "NODE_ENV=test jest --ci --forceExit",
       "test-coverage": "NODE_ENV=test jest --watch --coverage",
       "build-ts": "tsc",
       "postinstall": "yarn run build-ts && yarn copyfiles -u 1 src/shared.graphql src/modules/**/*.graphql dist"
