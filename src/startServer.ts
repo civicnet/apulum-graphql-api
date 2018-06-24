@@ -5,6 +5,8 @@ import { GraphQLServer } from 'graphql-yoga'
 import { redis } from './redis';
 import * as session from 'express-session';
 import * as connectRedis from 'connect-redis';
+import * as RateLimit from 'express-rate-limit';
+import * as RateLimitRedisStore from 'rate-limit-redis';
 
 import { createTypeormConn } from "./utils/createTypeormConn";
 
@@ -26,6 +28,18 @@ export const startServer = async () => {
       })
     });
 
+    server.express.use(
+      new RateLimit({
+        windowMs: 15*60*1000,
+        max: 100,
+        delayMs: 0,
+        store: new RateLimitRedisStore({
+          client: redis,
+        })
+      })
+    );
+
+    // For Heroku
     if (process.env.NODE_ENV === 'production') {
       server.express.set('trust proxy', 1);
     }
