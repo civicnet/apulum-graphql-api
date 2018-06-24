@@ -1,9 +1,9 @@
 import { Connection } from 'typeorm';
-import { createTypeormConn } from '../../../utils/createTypeormConn';
 import { User } from '../../../entity/User';
 import * as casual from 'casual';
 
 import { TestClient } from '../../../utils/TestClient';
+import { createTypeormConn } from '../../../utils/createTypeormConn';
 
 let conn: Connection;
 let email = casual.email;

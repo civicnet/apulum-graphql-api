@@ -1,37 +1,36 @@
 import { request } from 'graphql-request';
+import * as casual from 'casual';
+
 import { User } from '../../../entity/User';
-import { createTypeormConn } from '../../../utils/createTypeormConn';
 
 import {
   invalidLogin,
   confirmEmailError
 } from '../errorMessages';
 
-import {
-  valid_email,
-  valid_password,
-  userCreation
-} from '../../user/queries/queries';
-
 import { Connection } from 'typeorm';
 import { TestClient } from '../../../utils/TestClient';
+import { createTypeormConn } from '../../../utils/createTypeormConn';
 
 let conn: Connection;
+let client: TestClient;
 
 beforeAll(async () => {
- conn = await createTypeormConn();
+  conn = await createTypeormConn();
+  client = new TestClient(
+    process.env.TEST_HOST as string
+  );
 })
 
 afterAll(async () => {
   conn.close();
 });
 
-describe('Login user', () => {
-  test('can\'t login with unknown email', async() => {
-    const client = new TestClient(
-      process.env.TEST_HOST as string
-    );
-    const response = await client.login(valid_email, valid_password);
+describe("Login user", () => {
+  it("can't login with unknown email", async () => {
+    const email = casual.email;
+    const password = casual.password;
+    const response = await client.login(email, password);
 
     expect(response.data).toEqual({
       login: [
@@ -43,16 +42,12 @@ describe('Login user', () => {
     });
   });
 
-  test('needs account confirmation', async() => {
-    await request(
-      process.env.TEST_HOST as string,
-      userCreation(valid_email, valid_password)
-    );
+  it('needs account confirmation', async() => {
+    const email = casual.email;
+    const password = casual.password;
 
-    const client = new TestClient(
-      process.env.TEST_HOST as string
-    );
-    const response = await client.login(valid_email, valid_password);
+    await client.register(email, password);
+    const response = await client.login(email, password);
 
     expect(response.data).toEqual({
       login: [{
@@ -63,21 +58,23 @@ describe('Login user', () => {
   });
 
   test('can login', async() => {
-    await User.update({ email: valid_email }, { confirmed: true });
+    const email = casual.email;
+    const password = casual.password;
+    await client.register(email, password);
 
-    const client = new TestClient(
-      process.env.TEST_HOST as string
-    );
-    const response = await client.login(valid_email, valid_password);
+    await User.update({ email }, { confirmed: true });
+    const response = await client.login(email, password);
 
     expect(response.data).toEqual({ login: null });
   });
 
   test('can\'t login with bad password', async() => {
-    const client = new TestClient(
-      process.env.TEST_HOST as string
-    );
-    const response = await client.login(valid_email, 'a');
+    const email = casual.email;
+    const password = casual.password;
+    await client.register(email, password);
+
+    await User.update({ email }, { confirmed: true });
+    const response = await client.login(email, 'a');
 
     expect(response.data).toEqual({
       login: [

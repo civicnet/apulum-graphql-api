@@ -62,12 +62,12 @@
       "start": "NODE_ENV=production cd dist/ && node index.js",
       "dev": "NODE_ENV=development nodemon --exec ts-node src/index.ts",
       "gen-schema-types": "ts-node src/scripts/createTypes.ts",
-      "test": "NODE_ENV=test jest --watchAll --runInBand",
+      "test": "NODE_ENV=test jest --watch",
       "build-ts": "tsc",
       "postinstall": "yarn run build-ts && yarn copyfiles -u 1 src/shared.graphql src/modules/**/*.graphql dist"
    },
    "jest": {
-      "globalSetup": "./src/test-setup/callSetup.js",
+      "globalSetup": "./src/testUtils/callSetup.js",
       "transform": {
          "^.+\\.tsx?$": "ts-jest"
       },

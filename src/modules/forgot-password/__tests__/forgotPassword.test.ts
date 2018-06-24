@@ -1,5 +1,4 @@
 import { Connection } from 'typeorm';
-import { createTypeormConn } from '../../../utils/createTypeormConn';
 import { User } from '../../../entity/User';
 import * as casual from 'casual';
 
@@ -10,6 +9,7 @@ import { forgotPasswordLocked } from '../../login/errorMessages';
 import { passwordTooShort } from '../../register/errorMessages';
 import { expiredForgotPasswordKey } from '../errorMessages';
 import { forgotPasswordLockAccount } from '../../../utils/forgotPasswordLockAccount';
+import { createTypeormConn } from '../../../utils/createTypeormConn';
 
 let conn: Connection;
 const redis = new Redis();
@@ -21,11 +21,13 @@ const newPassword = casual.password;
 
 beforeAll(async() => {
   conn = await createTypeormConn();
+
   const user = await User.create({
     email: email,
     password: password,
     confirmed: true,
   }).save();
+
   userId = user.id;
 })
 

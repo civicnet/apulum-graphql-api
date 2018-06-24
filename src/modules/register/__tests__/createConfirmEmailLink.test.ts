@@ -1,7 +1,8 @@
 import { createConfirmEmailLink } from "../createConfirmEmailLink";
-import { createTypeormConn } from "../createTypeormConn";
-import { User } from "../../entity/User";
+import { createTypeormConn } from '../../../utils/createTypeormConn';
+import { User } from '../../../entity/User';
 import { Connection } from "typeorm";
+import * as casual from 'casual';
 
 
 import * as Redis from 'ioredis';
@@ -15,8 +16,8 @@ let conn: Connection;
 beforeAll(async() => {
   conn = await createTypeormConn();
   const user = await User.create({
-    email: "confirmation@test.com",
-    password: "1234",
+    email: casual.email,
+    password: casual.password,
   }).save();
   userId = user.id;
 })

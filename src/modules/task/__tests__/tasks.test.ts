@@ -1,9 +1,8 @@
-import { request } from 'graphql-request';
 import { v4 } from 'uuid';
+import * as casual from 'casual';
 
 import { Task } from '../../../entity/Task';
 import { User } from '../../../entity/User';
-import { createTypeormConn } from '../../../utils/createTypeormConn';
 
 import {
   titleNotLongEnough,
@@ -12,31 +11,18 @@ import {
   invalidUserID
 } from '../errorMessages';
 
-import {
-  creationMutation,
-  valid_title,
-  valid_description,
-  tasksByUserQuery,
-  tasksQuery,
-  singleTaskQuery,
-  deletionMutation,
-  upForGrabsQuery,
-  assignTaskMutation,
-  tasksForUser
-} from '../queries/queries';
-
-import {
-  userCreation,
-  valid_email,
-  valid_password
-} from '../../user/queries/queries';
-
 import { Connection } from 'typeorm';
+import { createTypeormConn } from '../../../utils/createTypeormConn';
+import { TestClient } from '../../../utils/TestClient';
 
 let conn: Connection;
+let client: TestClient;
 
 beforeAll(async () => {
- conn = await createTypeormConn();
+  conn = await createTypeormConn();
+  client = new TestClient(
+    process.env.TEST_HOST as string
+  );
 })
 
 afterAll(async () => {
@@ -45,137 +31,132 @@ afterAll(async () => {
 
 describe("Task management", () => {
   it("can create", async () => {
-    await request(
-      process.env.TEST_HOST as string,
-      userCreation(valid_email, valid_password)
-    );
-    const actualUsers = await User.find({ where: { valid_email }});
+    const email = casual.email;
+    const password = casual.password;
 
-    const response = await request(
-      process.env.TEST_HOST as string,
-      creationMutation(actualUsers[0].id, valid_title, valid_description)
-    );
-    expect(response).toMatchObject({
+    await client.register(email, password);
+    const actualUsers = await User.find({ where: { email }});
+
+    const title = casual.sentence;
+    const description = casual.sentence;
+    const response = await client.createTask(actualUsers[0].id, title, description);
+
+    expect(response.data).toMatchObject({
       createTask: [{
-        description: valid_description,
-        title: valid_title
+        description: description,
+        title: title
       }]
     });
 
     // TODO: should probably return success here (implement union type for Error | Success)
-    const tasks = await Task.find({ where: { title: valid_title }});
-    expect(tasks).toHaveLength(1);
+    const tasks = await Task.find({ where: { title }});
+    expect(tasks.length).toBeGreaterThanOrEqual(1);
 
     const task = tasks[0];
-    expect(task.title).toEqual(valid_title);
-    expect(task.description).toEqual(valid_description);
+    expect(task.title).toEqual(title);
+    expect(task.description).toEqual(description);
   });
 
   it("can query tasks by user", async() => {
-    const actualUsers = await User.find({ where: { valid_email }});
+    const email = casual.email;
+    const password = casual.password;
+    await client.register(email, password);
+
+    const actualUsers = await User.find({ where: { email }});
     const user = actualUsers[0];
 
-    const response: any = await request(
-      process.env.TEST_HOST as string,
-      tasksByUserQuery(user.id)
-    );
-    expect(response.tasksByUser).toHaveLength(1);
+    const title = casual.sentence;
+    const description = casual.sentence;
+    await client.createTask(user.id, title, description);
+
+    const response = await client.tasksByUser(user.id);
+    expect(response.data.tasksByUser).toHaveLength(1);
   });
 
   it("can query tasks", async () => {
-    const response: any = await request(
-      process.env.TEST_HOST as string,
-     tasksQuery()
-    );
-
-    expect(response.tasks).toHaveLength(1);
-    expect(response.tasks[0].title).toEqual(valid_title);
-    expect(response.tasks[0].description).toEqual(valid_description);
+    const response: any = await client.tasks();
+    expect(response.data.tasks.length).toBeGreaterThanOrEqual(1);
   });
 
   it("can query up-for-grabs tasks", async () => {
-    const response: any = await request(
-      process.env.TEST_HOST as string,
-      upForGrabsQuery()
-    );
-
-    expect(response.upForGrabsTasks).toHaveLength(1);
-    expect(response.upForGrabsTasks[0].title).toEqual(valid_title);
+    const response: any = await client.upForGrabsTasks();
+    expect(response.data.upForGrabsTasks.length).toBeGreaterThanOrEqual(1);
   });
 
   it("can assign task", async () => {
-    const actualUsers = await User.find({ where: { valid_email }});
+    const email = casual.email;
+    const password = casual.password;
+    await client.register(email, password);
+
+    const actualUsers = await User.find({ where: { email }});
     const user = actualUsers[0];
 
-    const tasks = await Task.find({ where: { title: valid_title }});
+    const title = casual.sentence;
+    const description = casual.description;
+    await client.createTask(user.id, title, description);
+    const tasks = await Task.find({ where: { title }});
     const task = tasks[0];
 
-    const response: any = await request(
-      process.env.TEST_HOST as string,
-      assignTaskMutation(task.id, user.id)
-    );
-
-    expect(response).toEqual({ assignTask: null });
+    const response = await client.assignTask(task.id, user.id);
+    expect(response.data).toEqual({ assignTask: null });
   });
 
   it("can query tasks assigned to user", async () => {
-    const actualUsers = await User.find({ where: { valid_email }});
+    const email = casual.email;
+    const password = casual.password;
+    await client.register(email, password);
+
+    const actualUsers = await User.find({ where: { email }});
     const user = actualUsers[0];
 
-    const response: any = await request(
-      process.env.TEST_HOST as string,
-      tasksForUser(user.id)
-    );
+    const title = casual.sentence;
+    const description = casual.description;
+    await client.createTask(user.id, title, description);
+    const tasks = await Task.find({ where: { title }});
+    const task = tasks[0];
+    await client.assignTask(task.id, user.id);
 
-    expect(response.tasksForUser).toHaveLength(1);
-    expect(response.tasksForUser[0].title).toEqual(valid_title);
+    const response = await client.tasksForUser(user.id);
+    expect(response.data.tasksForUser).toHaveLength(1);
+    expect(response.data.tasksForUser[0].title).toEqual(title);
   });
 
   it("can query single task", async () => {
-    const response: any = await request(
-      process.env.TEST_HOST as string,
-      tasksQuery()
-    );
+    const email = casual.email;
+    const password = casual.password;
+    await client.register(email, password);
 
-    const singleTask: any = await request(
-      process.env.TEST_HOST as string,
-      singleTaskQuery(response.tasks[0].id)
-    );
-    const task = singleTask.task;
+    const actualUsers = await User.find({ where: { email }});
+    const user = actualUsers[0];
 
-    expect(task.title).toEqual(valid_title);
-    expect(task.description).toEqual(valid_description);
+    const title = casual.sentence;
+    const description = casual.description;
+    await client.createTask(user.id, title, description);
+    const tasks = await Task.find({ where: { title }});
+    const task = tasks[0];
+
+    const singleTask = await client.task(task.id);
+    const queriedTask = singleTask.data.task;
+
+    expect(queriedTask.title).toEqual(title);
+    expect(queriedTask.description).toEqual(description);
   });
 
   it("can search for non-existent task", async () => {
-    const noTask: any = await request(
-      process.env.TEST_HOST as string,
-      singleTaskQuery(v4())
-    );
-    expect(noTask.task).toBeNull();
+    const noTask = await client.task(v4());
+    expect(noTask.data.task).toBeNull();
   })
 
   it("can delete valid task", async () => {
-    const task: any = await request(
-      process.env.TEST_HOST as string,
-      tasksQuery()
-    );
+    const task = await client.tasks();
+    const response = await client.deleteTask(task.data.tasks[0].id);
 
-    const response = await request(
-      process.env.TEST_HOST as string,
-      deletionMutation(task.tasks[0].id)
-    );
-
-    expect(response).toEqual({ deleteTask: null });
+    expect(response.data).toEqual({ deleteTask: null });
   });
 
   it("can't delete non-existent task", async () => {
-    const response = await request(
-      process.env.TEST_HOST as string,
-      deletionMutation(v4())
-    );
-
-    expect(response).toEqual({
+    const response = await client.deleteTask(v4());
+    expect(response.data).toEqual({
       deleteTask: [
         {
           message: taskDoesntExist,
@@ -186,12 +167,9 @@ describe("Task management", () => {
   });
 
   it("creation fails on bad fields", async () => {
-    const response: any = await request(
-      process.env.TEST_HOST as string,
-      creationMutation('a', 'b', 'c')
-    );
-    expect(response.createTask).toHaveLength(4);
-    expect(response.createTask).toEqual([
+    const response = await client.createTask('a', 'b', 'c');
+    expect(response.data.createTask).toHaveLength(4);
+    expect(response.data.createTask).toEqual([
       {
         path: 'title',
         message: titleNotLongEnough
