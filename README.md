@@ -1,4 +1,5 @@
-[![Heroku](https://heroku-badge.herokuapp.com/?app=karman-graphql-api&style=flat)](https://karman-graphql-api.herokuapp.com/)
+[![Heroku](https://badge.glitch.me/karman-graphql-api/heroku)](https://karman-graphql-api.herokuapp.com/)
+[![Build Status](https://travis-ci.com/civictechro/apulum-graphql-api.svg?branch=master)](https://travis-ci.com/civictechro/apulum-graphql-api)
 
 # Kármán API
 
