@@ -57,10 +57,10 @@ export const startServer = async () => {
       }),
       name: 'uid',
       secret: process.env.SESSION_SECRET as string,
-      // resave: false,
+      resave: false,
       saveUninitialized: false,
       cookie: {
-        httpOnly: false, // true,
+        httpOnly: false,
         secure: false, // process.env.NODE_ENV === "production",
         maxAge: 1000 * 60 * 60 * 24 * 7
       }
