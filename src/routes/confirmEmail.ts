@@ -10,8 +10,9 @@ export const confirmEmail = async (req: Request, res: Response) => {
   if (userId) {
     await User.update({ id: userId }, { confirmed: true });
     await redis.del(id);
-    res.send('ok');
+
+    res.redirect(process.env.FRONTEND_HOST + '/dashboard');
   } else {
-    res.send('invalid');
+    res.redirect(process.env.FRONTEND_HOST + '/403/?q=expired_key');
   }
 };
