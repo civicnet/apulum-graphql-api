@@ -9,8 +9,8 @@ export const removeAllUserSessions = async (userId: string, redis: Redis) => {
   );
 
   const promises = [];
-  for (let i = 0; i < sessionIds.length; i += 1) {
-    promises.push(redis.del(`${redisSessionPrefix}${sessionIds[i]}`));
+  for (const sessId of sessionIds) {
+    promises.push(redis.del(`${redisSessionPrefix}${sessId}`));
   }
   await Promise.all(promises);
-} 
+}

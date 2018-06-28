@@ -9,7 +9,7 @@ export interface ITaskResolution {
   resolution: {
     createdAt: number;
     updatedAt: number;
-    description: String;
+    description: string;
     achieved: boolean;
     entityVersion: number;
   }

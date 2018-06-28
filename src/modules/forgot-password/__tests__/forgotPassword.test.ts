@@ -13,8 +13,8 @@ import { createTypeormConn } from '../../../utils/createTypeormConn';
 
 let conn: Connection;
 const redis = new Redis();
-let email = casual.email;
-let password = casual.password;
+const email = casual.email;
+const password = casual.password;
 let userId: string;
 
 const newPassword = casual.password;
@@ -23,8 +23,8 @@ beforeAll(async() => {
   conn = await createTypeormConn();
 
   const user = await User.create({
-    email: email,
-    password: password,
+    email,
+    password,
     confirmed: true,
   }).save();
 

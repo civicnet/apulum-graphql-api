@@ -35,8 +35,7 @@ describe("New account confirmation link", () => {
     );
 
     const response = await fetch(url);
-    const text = await response.text();
-    expect(text).toEqual('ok');
+    expect(response.status).toEqual(200);
 
     const user = await User.findOne({ where: { id: userId }});
     expect((user as User).confirmed).toBeTruthy();
@@ -44,13 +43,13 @@ describe("New account confirmation link", () => {
     const chunks = url.split('/');
     const key = chunks[chunks.length - 1];
 
-    const redis_key = await redis.get(key);
-    expect(redis_key).toBeNull();
+    const redisKey = await redis.get(key);
+    expect(redisKey).toBeNull();
   });
 
   it("cannot confirm bad key", async () => {
-    const response = await fetch(`${process.env.TEST_HOST}/confirm/1234`);
-    const text = await response.text();
-    expect(text).toEqual('invalid');
+    const confirmURL = `${process.env.TEST_HOST}/confirm/1234`;
+    const response = await fetch(confirmURL);
+    expect(response.url === confirmURL).toBeFalsy();
   });
 });

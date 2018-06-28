@@ -58,10 +58,10 @@ export const resolvers: ResolverMap = {
 
   Query: {
     incidentReports: async () => {
-      return await getRepository(IncidentReport).find();
+      return getRepository(IncidentReport).find();
     },
     incidentReport: async (_, { id }) => {
-      return await IncidentReport.findOne({
+      return IncidentReport.findOne({
         where: { id },
       });
     },
@@ -69,7 +69,7 @@ export const resolvers: ResolverMap = {
       _,
       { incidentReportID }: GQL.ICommentsForIncidentReportOnQueryArguments
     ) => {
-      return await IncidentReportComment.find({
+      return IncidentReportComment.find({
         where: { incident: incidentReportID },
       });
     },
@@ -77,7 +77,7 @@ export const resolvers: ResolverMap = {
       _,
       { id }: GQL.IIncidentReportCommentOnQueryArguments
     ) => {
-      return await IncidentReportComment.findOne({
+      return IncidentReportComment.findOne({
         where: { id },
       });
     },
@@ -118,13 +118,13 @@ export const resolvers: ResolverMap = {
         }]
       }
 
-      let incident = await IncidentReport.create({
-        creator: creator,
-        title: title,
-        description: description,
-        latitude: latitude,
-        longitude: longitude,
-        type: type,
+      const incident = await IncidentReport.create({
+        creator,
+        title,
+        description,
+        latitude,
+        longitude,
+        type,
         status: "NEW"
       }).save();
 
@@ -208,7 +208,7 @@ export const resolvers: ResolverMap = {
       }
 
       await IncidentReportComment.create({
-        newStatus: newStatus,
+        newStatus,
         oldStatus: report.status,
         creator: user,
         incident: report,
@@ -252,7 +252,7 @@ export const resolvers: ResolverMap = {
         newStatus = statusChange.newStatus;
       }
 
-      let commentEntity = await IncidentReportComment.create({
+      const commentEntity = await IncidentReportComment.create({
         creator: user,
         incident: report,
         comment: comment || '',

@@ -27,12 +27,12 @@ export const resolvers: ResolverMap = {
   },
   Query: {
     users: async () => {
-      return await getRepository(User)
+      return getRepository(User)
         .createQueryBuilder('user')
         .getMany();
     },
     user: async (_, { id }: GQL.IUserOnQueryArguments) => {
-      return await User.findOne({
+      return User.findOne({
         where: { id },
       });
     },
@@ -46,7 +46,7 @@ export const resolvers: ResolverMap = {
       }
 
       const user = await User.findOne({
-        where: { id: id },
+        where: { id },
         select: ['id', 'email', 'firstName', 'lastName']
       });
 

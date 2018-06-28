@@ -12,7 +12,7 @@ export class DueDateTaskResolution extends BaseEntity {
   resolution: TaskResolution;
 
   @Column("varchar", { length: 64 })
-  dueDate: String
+  dueDate: string
 
   @ManyToOne(_ => User, user => user.createdDueDateResolutions)
   creator: User;

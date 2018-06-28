@@ -22,7 +22,7 @@ export class TestClient {
     return rp.post(this.url, {
       ...this.options,
       body: {
-        query: query
+        query
       }
     })
   }

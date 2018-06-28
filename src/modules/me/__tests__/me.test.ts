@@ -6,8 +6,8 @@ import { TestClient } from '../../../utils/TestClient';
 import { createTypeormConn } from '../../../utils/createTypeormConn';
 
 let conn: Connection;
-let email = casual.email;
-let pass = casual.password;
+const email = casual.email;
+const pass = casual.password;
 let userId: string;
 
 const client = new TestClient(
@@ -17,7 +17,7 @@ const client = new TestClient(
 beforeAll(async() => {
   conn = await createTypeormConn();
   const user = await User.create({
-    email: email,
+    email,
     password: pass,
     confirmed: true,
   }).save();
@@ -40,7 +40,7 @@ describe('Me query', () => {
 
     expect(response.data).toEqual({
       me: {
-        email: email,
+        email,
         id: userId
       }
     })

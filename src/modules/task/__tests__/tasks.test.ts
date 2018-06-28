@@ -43,8 +43,8 @@ describe("Task management", () => {
 
     expect(response.data).toMatchObject({
       createTask: [{
-        description: description,
-        title: title
+        description,
+        title
       }]
     });
 

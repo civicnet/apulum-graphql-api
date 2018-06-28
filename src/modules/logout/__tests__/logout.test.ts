@@ -6,15 +6,15 @@ import { TestClient } from '../../../utils/TestClient';
 import { createTypeormConn } from '../../../utils/createTypeormConn';
 
 let conn: Connection;
-let email = casual.email;
-let password = casual.password;
+const email = casual.email;
+const password = casual.password;
 let userId: string;
 
 beforeAll(async() => {
   conn = await createTypeormConn();
   const user = await User.create({
-    email: email,
-    password: password,
+    email,
+    password,
     confirmed: true,
   }).save();
   userId = user.id;

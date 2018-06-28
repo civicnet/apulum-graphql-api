@@ -46,9 +46,9 @@ const createResolution = async(taskId: string, description: string) => {
   await OnDemandTaskResolution.create<
      ITaskResolution & IOnDemandTaskResolution & BaseEntity
   >({
-    task: task,
+    task,
     resolution: {
-      description: description,
+      description,
     }
   }).save();
 
@@ -82,13 +82,13 @@ export const resolvers: ResolverMap = {
   },
   Query: {
     onDemandTaskResolutions: async () => {
-      return await queryResolutions(OnDemandTaskResolution);
+      return queryResolutions(OnDemandTaskResolution);
     },
     userApprovalTaskResolutions: async () => {
-      return await queryResolutions(UserApprovalTaskResolution);
+      return queryResolutions(UserApprovalTaskResolution);
     },
     dueDateTaskResolutions: async () => {
-      return await queryResolutions(DueDateTaskResolution);
+      return queryResolutions(DueDateTaskResolution);
     },
     taskResolutionForTask: async (_, __: GQL.ITaskOnQueryArguments) => {
       return null;
@@ -103,15 +103,15 @@ export const resolvers: ResolverMap = {
   Mutation: {
     createOnDemandTaskResolution: async (_, args: GQL.ICreateOnDemandTaskResolutionOnMutationArguments) => {
       const { taskId, description } = args;
-      return await createResolution(taskId, description);
+      return createResolution(taskId, description);
     },
     createUserApprovalTaskResolution: async (_, args: GQL.ICreateUserApprovalTaskResolutionOnMutationArguments) => {
       const { taskId, description } = args;
-      return await createResolution(taskId, description);
+      return createResolution(taskId, description);
     },
     createDueDateTaskResolution: async (_, args: GQL.ICreateDueDateTaskResolutionOnMutationArguments) => {
       const { taskId, description } = args;
-      return await createResolution(taskId, description);
+      return createResolution(taskId, description);
     },
   }
 }

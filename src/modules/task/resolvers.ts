@@ -43,25 +43,25 @@ export const resolvers: ResolverMap = {
   },
   Query: {
     tasks: async () => {
-      return await getRepository(Task).find();
+      return getRepository(Task).find();
     },
     task: async (_, { id }: GQL.ITaskOnQueryArguments) => {
-      return await Task.findOne({
+      return Task.findOne({
         where: { id },
       });
     },
     tasksByUser: async (_, { id }: GQL.ITaskOnQueryArguments) => {
-      return await Task.find({
+      return Task.find({
         where: { creator: id },
       });
     },
     tasksForUser: async (_, { id }: GQL.ITaskOnQueryArguments) => {
-      return await Task.find({
+      return Task.find({
         where: { asignee: id },
       });
     },
     upForGrabsTasks: async () => {
-      return await Task.find({
+      return Task.find({
         where: { asignee: null },
       });
     }
@@ -85,17 +85,17 @@ export const resolvers: ResolverMap = {
         }]
       }
 
-      let task = await Task.create({
-        creator: creator,
-        title: title,
-        description: description,
+      const task = await Task.create({
+        creator,
+        title,
+        description,
       }).save();
 
       return [task];
     },
     deleteTask: async (_, { id }: GQL.IDeleteTaskOnMutationArguments) => {
       const task = await Task.findOne({
-        where: { id: id },
+        where: { id },
         select: ['id']
       });
 
@@ -108,7 +108,7 @@ export const resolvers: ResolverMap = {
         ]
       }
 
-      await Task.delete({ id: id });
+      await Task.delete({ id });
       return null;
     },
     assignTask: async (_, { taskId, userId }: GQL.IAssignTaskOnMutationArguments) => {

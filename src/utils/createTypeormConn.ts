@@ -18,7 +18,7 @@ export const createTypeormConn = async (
     });
   }
 
-  return await createConnection({
+  return createConnection({
     ...connectionOptions,
     name: "default",
     synchronize: options.resetDB,

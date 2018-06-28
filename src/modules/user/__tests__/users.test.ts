@@ -59,13 +59,13 @@ describe("User management", () => {
     expect(beforeResponse.data.user.firstName).toBeNull();
     expect(beforeResponse.data.user.lastName).toBeNull();
 
-    let newFirstName = casual.first_name;
-    let newLastName = casual.last_name;
+    const newFirstName = casual.first_name;
+    const newLastName = casual.last_name;
 
     const response = await client.updateUser(user.id, newFirstName, newLastName);
     expect(response.data.updateUser).toEqual([{
       id: user.id,
-      email: email,
+      email,
       firstName: newFirstName,
       lastName: newLastName
     }]);
