@@ -9,6 +9,7 @@ import { userNotFoundError, expiredForgotPasswordKey } from "./errorMessages";
 import { forgotPasswordPrefix } from "../../constants";
 import { registerPasswordValidation } from "../../yupSchemas";
 import { formatYupError } from '../../utils/formatYupError';
+import { sendEmail } from '../../utils/sendEmail';
 
 
 const schema = yup.object().shape({
@@ -34,13 +35,22 @@ export const resolvers: ResolverMap = {
       }
 
       await forgotPasswordLockAccount(user.id, redis);
-      await createForgotPasswordLink(
+      const emailLink = await createForgotPasswordLink(
         process.env.FRONTEND_HOST as string,
         user.id,
         redis,
       );
 
-      // @todo send email with url
+      if (process.env.NODE_ENV !== 'test') {
+        const input = {
+          to: email,
+          subject: "Hopa! Care era parola?",
+          text: "Dacă ai cerut resetarea parolei, click pe butonul de mai jos pentru a alege o parolă nouă",
+          ctaText: "Schimbă parola",
+          ctaURL: emailLink,
+        };
+        sendEmail(input);
+      }
 
       return true;
     },

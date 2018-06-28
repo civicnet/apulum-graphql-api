@@ -53,11 +53,15 @@ export const resolvers: ResolverMap = {
       await user.save();
 
       if (process.env.NODE_ENV !== 'test') {
-        // console.log("Sending " + url + " to " + user.id);
-        sendEmail(
-          email,
-          await createConfirmEmailLink(url, user.id, redis)
-        );
+        const emailLink = await createConfirmEmailLink(url, user.id, redis);
+        const input = {
+          to: email,
+          subject: "Bun venit! Avem nevoie de confirmarea contului tau în Karman CMS",
+          text: "Pentru a putea începe să folosești Karman, va trebui să confirmi această adresă de email, pentru a ne asigura că ești chiar tu. ",
+          ctaText: "Confirmă email",
+          ctaURL: emailLink,
+        };
+        sendEmail(input);
       }
       return null;
     }
