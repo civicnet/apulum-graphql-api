@@ -1,23 +1,24 @@
 [
   {
-     "name": "production",
-     "type": "postgres",
-     "synchronize": true,
-     "logging": false,
-     "entities": [
-        "entity/**/*.js"
-     ],
-     "migrations": [
-        "migration/**/*.js"
-     ],
-     "subscribers": [
-        "subscriber/**/*.js"
-     ],
-     "cli": {
-        "entitiesDir": "entity",
-        "migrationsDir": "migration",
-        "subscribersDir": "subscriber"
-     }
+    "name": "production",
+    "type": "postgres",
+    "synchronize": true,
+    "logging": false,
+    "dropSchema": true,
+    "entities": [
+      "entity/**/*.js"
+    ],
+    "migrations": [
+      "migration/**/*.js"
+    ],
+    "subscribers": [
+      "subscriber/**/*.js"
+    ],
+    "cli": {
+      "entitiesDir": "entity",
+      "migrationsDir": "migration",
+      "subscribersDir": "subscriber"
+    }
   },
   {
     "name": "development",
@@ -30,18 +31,18 @@
     "synchronize": true,
     "logging": true,
     "entities": [
-        "src/entity/**/*.ts"
+      "src/entity/**/*.ts"
     ],
     "migrations": [
-        "src/migration/**/*.ts"
+      "src/migration/**/*.ts"
     ],
     "subscribers": [
-        "src/subscriber/**/*.ts"
+      "src/subscriber/**/*.ts"
     ],
     "cli": {
-        "entitiesDir": "src/entity",
-        "migrationsDir": "src/migration",
-        "subscribersDir": "src/subscriber"
+      "entitiesDir": "src/entity",
+      "migrationsDir": "src/migration",
+      "subscribersDir": "src/subscriber"
     }
   },
   {
@@ -51,18 +52,18 @@
     "logging": false,
     "dropSchema": true,
     "entities": [
-        "src/entity/**/*.ts"
+      "src/entity/**/*.ts"
     ],
     "migrations": [
-        "src/migration/**/*.ts"
+      "src/migration/**/*.ts"
     ],
     "subscribers": [
-        "src/subscriber/**/*.ts"
+      "src/subscriber/**/*.ts"
     ],
     "cli": {
-        "entitiesDir": "src/entity",
-        "migrationsDir": "src/migration",
-        "subscribersDir": "src/subscriber"
+      "entitiesDir": "src/entity",
+      "migrationsDir": "src/migration",
+      "subscribersDir": "src/subscriber"
     }
   }
 ]
