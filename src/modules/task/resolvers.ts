@@ -43,35 +43,26 @@ export const resolvers: ResolverMap = {
   },
   Query: {
     tasks: async () => {
-      const tasks = await getRepository(Task)
-        .createQueryBuilder('task')
-        .innerJoinAndSelect('task.creator', 'creator')
-        .getMany();
-
-      return tasks;
+      return await getRepository(Task).find();
     },
     task: async (_, { id }: GQL.ITaskOnQueryArguments) => {
       return await Task.findOne({
         where: { id },
-        relations: ['creator']
       });
     },
     tasksByUser: async (_, { id }: GQL.ITaskOnQueryArguments) => {
       return await Task.find({
         where: { creator: id },
-        relations: ['creator']
       });
     },
     tasksForUser: async (_, { id }: GQL.ITaskOnQueryArguments) => {
       return await Task.find({
         where: { asignee: id },
-        relations: ['asignee']
       });
     },
     upForGrabsTasks: async () => {
       return await Task.find({
         where: { asignee: null },
-        relations: ['creator']
       });
     }
   },
