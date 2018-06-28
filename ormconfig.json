@@ -4,7 +4,6 @@
     "type": "postgres",
     "synchronize": true,
     "logging": false,
-    "dropSchema": true,
     "entities": [
       "entity/**/*.js"
     ],

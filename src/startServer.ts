@@ -84,7 +84,9 @@ export const startServer = async () => {
       resetDB: true,
     });
   } else {
-    await createTypeormConn();
+    await createTypeormConn({
+      resetDB: Boolean(process.env.RESET_DB)
+    });
   }
 
   const port = process.env.PORT || 4000;
