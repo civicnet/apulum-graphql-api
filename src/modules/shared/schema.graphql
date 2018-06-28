@@ -1,0 +1,22 @@
+# import User from "../user/schema.graphql"
+
+scalar DateTime
+
+type Error {
+    path: String!
+    message: String!
+}
+
+"""
+Any connected entity in the graph is represented by a Node.
+"""
+interface Node {
+  "Node ID, a unique uuid-v4 value"
+  id: ID!
+  "Every object should be created by a registered User"
+  creator: User!
+  "When was this node initially created?"
+  createdAt: DateTime!
+  "When was this node last updated?"
+  updatedAt: DateTime!
+}

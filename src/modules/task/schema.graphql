@@ -1,11 +1,14 @@
-# import Error from "../../shared.graphql"
+# import Error, Node from "../shared/schema.graphql"
 # import User from "../user/schema.graphql"
 
-type Task {
+type Task implements Node {
   id: ID!
+  creator: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
   title: String!
   description: String!
-  creator: User!
   asignee: User
 }
 

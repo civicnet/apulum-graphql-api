@@ -10,12 +10,21 @@ export const genSchema = () => {
   const folders = fs.readdirSync(path.join(__dirname, '../modules'));
 
   folders.forEach((folder) => {
-      const { resolvers } = require(`../modules/${folder}/resolvers`);
+      let resolvers = {};
+      if (folder !== 'shared') {
+        resolvers = require(`../modules/${folder}/resolvers`).resolvers;
+      }
       const typeDefs = importSchema(
           path.join(__dirname, `../modules/${folder}/schema.graphql`)
       );
 
-      schemas.push(makeExecutableSchema({ resolvers, typeDefs }));
+      schemas.push(makeExecutableSchema({
+        resolvers,
+        typeDefs,
+        resolverValidationOptions: {
+          requireResolversForResolveType: false
+        }
+      }));
   })
 
   return mergeSchemas({ schemas });

@@ -1,8 +1,8 @@
 import * as yup from 'yup';
 
 import { ResolverMap } from "../../types/graphql-utils";
-import { OnDemandTaskResolution } from "../../entity/OnDemandTaskResolution";
-import { getRepository } from "typeorm";
+import { OnDemandTaskResolution, IOnDemandTaskResolution } from "../../entity/OnDemandTaskResolution";
+import { getRepository, BaseEntity } from "typeorm";
 
 import {
   invalidTaskID,
@@ -14,7 +14,7 @@ import { Task } from '../../entity/Task';
 import { uuidRegex } from '../../utils/uuidRegex';
 import { UserApprovalTaskResolution } from '../../entity/UserApprovalTaskResolution';
 import { DueDateTaskResolution } from '../../entity/DueDateTaskResolution';
-import { TaskResolution } from '../../entity/TaskResolution';
+import { ITaskResolution } from '../../entity/TaskResolution';
 
 const schema = yup.object().shape({
   taskId: yup
@@ -43,20 +43,29 @@ const createResolution = async(taskId: string, description: string) => {
     }]
   }
 
-  await OnDemandTaskResolution.create({
+  await OnDemandTaskResolution.create<
+     ITaskResolution & IOnDemandTaskResolution & BaseEntity
+  >({
     task: task,
-    description: description,
+    resolution: {
+      description: description,
+    }
   }).save();
 
   return null;
 }
 
 const queryResolutions = async(resolution: any) => {
-  return await getRepository(resolution)
+  const response = await getRepository(resolution)
     .createQueryBuilder('resolution')
     .innerJoinAndSelect('resolution.task', 'task')
     .innerJoinAndSelect('task.creator', 'creator')
     .getMany();
+
+  return response.map((res: any) => ({
+    ...res,
+    ...res.resolution,
+  }));
 };
 
 export const resolvers: ResolverMap = {
@@ -81,19 +90,11 @@ export const resolvers: ResolverMap = {
     dueDateTaskResolutions: async () => {
       return await queryResolutions(DueDateTaskResolution);
     },
-    taskResolutionForTask: async (_, { id }: GQL.ITaskOnQueryArguments) => {
-      const response: any = await Task.findOne({
-        where: { id },
-        relations: ['resolution']
-      });
-
-      return response.resolution;
+    taskResolutionForTask: async (_, __: GQL.ITaskOnQueryArguments) => {
+      return null;
     },
-    taskResolution: async (_, { id }: GQL.ITaskOnQueryArguments) => {
-      return await TaskResolution.findOne({
-        where: { id },
-        relations: ['task']
-      });
+    taskResolution: async (_, __: GQL.ITaskOnQueryArguments) => {
+      return null;
     },
 
   },

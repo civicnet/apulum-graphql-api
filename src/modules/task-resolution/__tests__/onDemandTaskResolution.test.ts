@@ -44,7 +44,6 @@ describe("On Demand Task Resolution test", () => {
 
   it("can query resolutions", async () => {
     const response: any = await client.onDemandTaskResolutions();
-
     expect(response.data.onDemandTaskResolutions.length).toBeGreaterThanOrEqual(1);
   });
 });

@@ -5,20 +5,31 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   BeforeInsert,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from "typeorm";
-
-import * as bcrypt from 'bcryptjs';
 
 import { Task } from "./Task";
 import { UserApprovalTaskResolution } from "./UserApprovalTaskResolution";
 import { IncidentReport } from "./IncidentReport";
 import { IncidentReportComment } from "./IncidentReportComment";
 
+import { DueDateTaskResolution } from "./DueDateTaskResolution";
+import { OnDemandTaskResolution } from "./OnDemandTaskResolution";
+
+import * as bcrypt from 'bcryptjs';
+
 @Entity("users")
 export class User extends BaseEntity {
 
   @PrimaryGeneratedColumn("uuid")
   id: string;
+
+  @CreateDateColumn({type: "timestamp"})
+  createdAt: Date;
+
+  @UpdateDateColumn({type: "timestamp"})
+  updatedAt: Date;
 
   @Column("varchar", { length: 255 })
   email: string;
@@ -38,24 +49,28 @@ export class User extends BaseEntity {
   @Column("boolean", { default: false })
   forgotPasswordLocked: boolean
 
-  // @ts-ignore `type` is not being used
-  @OneToMany(type => Task, task => task.creator)
+  @OneToMany(_ => UserApprovalTaskResolution, resolution => resolution.creator)
+  createdUserApprovalResolutions: UserApprovalTaskResolution[];
+
+  @OneToMany(_ => OnDemandTaskResolution, resolution => resolution.creator)
+  createdOnDemandResolutions: OnDemandTaskResolution[];
+
+  @OneToMany(_ => DueDateTaskResolution, resolution => resolution.creator)
+  createdDueDateResolutions: OnDemandTaskResolution[];
+
+  @OneToMany(_ => Task, task => task.creator)
   tasks: Task[];
 
-  // @ts-ignore `type` is not being used
-  @OneToMany(type => IncidentReport, incident => incident.creator)
+  @OneToMany(_ => IncidentReport, incident => incident.creator)
   incidents: IncidentReport[];
 
-  // @ts-ignore `type` is not being used
-  @OneToMany(type => Task, task => task.asignee)
+  @OneToMany(_ => Task, task => task.asignee)
   asignedTasks: Task[];
 
-  // @ts-ignore `type` is not being used
-  @OneToMany(type => IncidentReportComment, comment => comment.creator)
-  incidentAttachments: IncidentReportComment[];
+  @OneToMany(_ => IncidentReportComment, comment => comment.creator)
+  incidentComments: IncidentReportComment[];
 
-  // @ts-ignore `type` is not being used
-  @OneToMany(type => UserApprovalTaskResolution, resolution => resolution.approver)
+  @OneToMany(_ => UserApprovalTaskResolution, resolution => resolution.approvedBy)
   approvedResolutions: UserApprovalTaskResolution[];
 
   @BeforeInsert()

@@ -19,11 +19,11 @@ import { uuidRegex } from "../../utils/uuidRegex";
 const schema = yup.object().shape({
   title: yup
     .string()
-    .min(5, titleNotLongEnough)
+    .min(3, titleNotLongEnough)
     .max(255),
   description: yup
     .string()
-    .min(16, descriptionNotLongEnough),
+    .min(3, descriptionNotLongEnough),
   userId: yup
     .string()
     .min(36, invalidUserID)

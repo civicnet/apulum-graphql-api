@@ -4,7 +4,11 @@ import {
   PrimaryGeneratedColumn,
   BaseEntity,
   ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+  JoinTable,
 } from "typeorm";
+
 import { IncidentReport } from "./IncidentReport";
 import { User } from "./User";
 
@@ -14,21 +18,28 @@ export class IncidentReportComment extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @CreateDateColumn({type: "timestamp"})
+  createdAt: Date;
+
+  @UpdateDateColumn({type: "timestamp"})
+  updatedAt: Date;
+
   @Column("text")
   comment: string;
 
-  @Column("varchar", { length: 64 })
+  @Column("varchar", { length: 64, nullable: true })
   oldStatus: string;
 
-  @Column("varchar", { length: 64 })
+  @Column("varchar", { length: 64, nullable: true })
   newStatus: string;
 
-  // @ts-ignore `type` is not being used
-  @ManyToOne(type => IncidentReport, incident => incident.comments)
+  @ManyToOne(_ => IncidentReport, incident => incident.comments)
   incident: IncidentReport
 
-  // @ts-ignore `type` is not being used
-  @ManyToOne(type => User, user => user.incidentComments)
+  @ManyToOne(_ => User, user => user.incidentComments, {
+    eager: true
+  })
+  @JoinTable()
   creator: User
 
 }

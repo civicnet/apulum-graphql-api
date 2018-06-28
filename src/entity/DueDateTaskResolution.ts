@@ -1,8 +1,22 @@
 import { TaskResolution } from "./TaskResolution";
-import { Column, ChildEntity } from "typeorm";
+import { Column, Entity, BaseEntity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "./User";
+import { Task } from "./Task";
 
-@ChildEntity()
-export class DueDateTaskResolution extends TaskResolution {
+@Entity()
+export class DueDateTaskResolution extends BaseEntity {
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
+
+  @Column(_ => TaskResolution)
+  resolution: TaskResolution;
+
   @Column("varchar", { length: 64 })
   dueDate: String
+
+  @ManyToOne(_ => User, user => user.createdDueDateResolutions)
+  creator: User;
+
+  @ManyToOne(_ => Task, task => task.dueDateResolutions)
+  task: Task;
 }

@@ -1,7 +1,11 @@
-# import Error from "../../shared.graphql"
+# import Error, Node from "../shared/schema.graphql"
 
-type User {
+type User implements Node {
   id: ID!
+  creator: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
   email: String!
   firstName: String
   lastName: String

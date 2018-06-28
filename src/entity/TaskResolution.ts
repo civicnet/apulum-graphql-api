@@ -1,17 +1,26 @@
-import { PrimaryGeneratedColumn, Column, BaseEntity, OneToOne, Entity, TableInheritance } from "typeorm";
-import { Task } from "./Task";
+import {
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  VersionColumn,
+} from "typeorm";
 
-@Entity()
-@TableInheritance({
-  pattern: "STI",
-  column: {
-      name: "type",
-      type: "varchar",
-  },
-})
-export class TaskResolution extends BaseEntity {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
+export interface ITaskResolution {
+  resolution: {
+    createdAt: number;
+    updatedAt: number;
+    description: String;
+    achieved: boolean;
+    entityVersion: number;
+  }
+}
+
+export class TaskResolution {
+  @CreateDateColumn({type: "timestamp"})
+  createdAt: Date;
+
+  @UpdateDateColumn({type: "timestamp"})
+  updatedAt: Date;
 
   @Column("text")
   description: string;
@@ -19,7 +28,6 @@ export class TaskResolution extends BaseEntity {
   @Column("boolean", { default: false })
   achieved: boolean
 
-  // @ts-ignore `type` is not being used
-  @OneToOne(type => Task, task => task.resolution)
-  task: Task
+  @VersionColumn()
+  entityVersion: number;
 }

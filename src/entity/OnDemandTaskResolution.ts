@@ -1,6 +1,31 @@
 import { TaskResolution } from "./TaskResolution";
-import { ChildEntity } from "typeorm";
+import {
+  PrimaryGeneratedColumn,
+  Entity,
+  Column,
+  BaseEntity,
+  ManyToOne,
+} from "typeorm";
 
-@ChildEntity()
-export class OnDemandTaskResolution extends TaskResolution {
+import { User } from "./User";
+import { Task } from "./Task";
+
+export interface IOnDemandTaskResolution {
+  creator: User;
+  task: Task;
+}
+
+@Entity()
+export class OnDemandTaskResolution extends BaseEntity {
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
+
+  @Column(_ => TaskResolution)
+  resolution: TaskResolution;
+
+  @ManyToOne(_ => User, user => user.createdOnDemandResolutions)
+  creator: User
+
+  @ManyToOne(_ => Task, task => task.onDemandResolutions)
+  task: Task;
 }

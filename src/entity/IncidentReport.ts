@@ -4,7 +4,10 @@ import {
   BaseEntity,
   PrimaryGeneratedColumn,
   OneToMany,
-  ManyToOne
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+  JoinTable
 } from "typeorm";
 import { User } from "./User";
 import { IncidentReportComment } from "./IncidentReportComment";
@@ -14,6 +17,12 @@ export class IncidentReport extends BaseEntity {
 
   @PrimaryGeneratedColumn("uuid")
   id: string;
+
+  @CreateDateColumn({type: "timestamp"})
+  createdAt: Date;
+
+  @UpdateDateColumn({type: "timestamp"})
+  updatedAt: Date;
 
   @Column("varchar", { length: 255 })
   title: string;
@@ -33,11 +42,15 @@ export class IncidentReport extends BaseEntity {
   @Column("decimal", { precision: 8, scale: 5 })
   longitude: number;
 
-  // @ts-ignore `type` is not being used
-  @ManyToOne(type => User, user => user.incidents)
+  @ManyToOne(_ => User, user => user.incidents, {
+    eager: true
+  })
+  @JoinTable()
   creator: User
 
-  // @ts-ignore `type` is not being used
-  @OneToMany(type => IncidentReportComment, comment => comment.incident)
+  @OneToMany(_ => IncidentReportComment, comment => comment.incident, {
+    eager: true
+  })
+  @JoinTable()
   comments: IncidentReportComment[];
 }

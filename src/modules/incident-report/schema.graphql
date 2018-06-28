@@ -1,4 +1,4 @@
-# import Error from "../../shared.graphql"
+# import Error, DateTime, Node from "../shared/schema.graphql"
 # import User from "../user/schema.graphql"
 
 "A broad list of incident report types in the city"
@@ -21,9 +21,12 @@ A comment can be made by either citizens, or city representatives. It doesn't
 have to have an actual text comment if it updates the status, and it doesn't
 have to have a status update if it has a text comment.
 """
-type IncidentReportComment {
+type IncidentReportComment implements Node {
   id: ID!
   creator: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
   incidentReport: IncidentReport!
   comment: String
   """
@@ -40,9 +43,12 @@ add a short title and place a marker on the map in order to localize it. Each re
 comments from city representatives, other citizens or themselves and each report has a status that
 describes the report's current state.
 """
-type IncidentReport {
+type IncidentReport implements Node {
   id: ID!
-  creator: User
+  creator: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
   description: String!
   title: String!
   "The latitude is stored in the DB with a 1m precision, which should suffice for any city report"
@@ -80,7 +86,7 @@ input IncidentReportStatusChangeInput {
 }
 
 """
-Creating a new comment should contain other a text comment, or a status change, or both.
+Creating a new comment should contain either a text comment, or a status change, or both.
 """
 input IncidentReportCommentInput {
   userID: ID!

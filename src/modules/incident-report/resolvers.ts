@@ -47,6 +47,7 @@ export const resolvers: ResolverMap = {
   },
   MaybeIncidentReport: {
     __resolveType: (obj) => {
+
       if (obj.path) {
         return 'Error';
       }
@@ -57,17 +58,11 @@ export const resolvers: ResolverMap = {
 
   Query: {
     incidentReports: async () => {
-      return await getRepository(IncidentReport)
-        .createQueryBuilder('incidentReport')
-        .leftJoinAndSelect("incidentReport.creator", "user")
-        .leftJoinAndSelect("incidentReport.comments", "incidentReportComment")
-        .getMany();
+      return await getRepository(IncidentReport).find();
     },
     incidentReport: async (_, { id }) => {
       return await IncidentReport.findOne({
         where: { id },
-        relations: ['creator', 'comments']
-
       });
     },
     commentsForIncidentReport: async (
@@ -76,7 +71,6 @@ export const resolvers: ResolverMap = {
     ) => {
       return await IncidentReportComment.find({
         where: { incident: incidentReportID },
-        relations: ['creator']
       });
     },
     incidentReportComment: async (
@@ -85,7 +79,6 @@ export const resolvers: ResolverMap = {
     ) => {
       return await IncidentReportComment.findOne({
         where: { id },
-        relations: ['creator']
       });
     },
   },

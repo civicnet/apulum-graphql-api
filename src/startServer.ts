@@ -28,7 +28,10 @@ export const startServer = async () => {
       url: request.protocol + '://' + request.get('host'),
       session: request.session,
       req: request
-    })
+    }),
+    resolverValidationOptions: {
+      requireResolversForResolveType: false
+    }
   });
 
   if (process.env.NODE_ENV === 'production') {

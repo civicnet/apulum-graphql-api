@@ -4,11 +4,16 @@ import {
   BaseEntity,
   PrimaryGeneratedColumn,
   ManyToOne,
-  JoinColumn,
-  OneToOne
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+  JoinTable
 } from "typeorm";
+
 import { User } from "./User";
-import { TaskResolution } from "./TaskResolution";
+import { UserApprovalTaskResolution } from "./UserApprovalTaskResolution";
+import { OnDemandTaskResolution } from "./OnDemandTaskResolution";
+import { DueDateTaskResolution } from "./DueDateTaskResolution";
 
 @Entity("tasks")
 export class Task extends BaseEntity {
@@ -16,22 +21,36 @@ export class Task extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @CreateDateColumn({type: "timestamp"})
+  createdAt: Date;
+
+  @UpdateDateColumn({type: "timestamp"})
+  updatedAt: Date;
+
   @Column("varchar", { length: 255 })
   title: string;
 
   @Column("text")
   description: string;
 
-  // @ts-ignore `type` is not being used
-  @ManyToOne(type => User, user => user.tasks)
+  @ManyToOne(_ => User, user => user.tasks, {
+    eager: true
+  })
+  @JoinTable()
   creator: User
 
-  // @ts-ignore `type` is not being used
-  @ManyToOne(type => User, user => user.asignedTasks)
+  @ManyToOne(_ => User, user => user.asignedTasks, {
+    eager: true
+  })
+  @JoinTable()
   asignee: User
 
-  // @ts-ignore `type` is not being used
-  @OneToOne(type => TaskResolution, resolution => resolution.task)
-  @JoinColumn()
-  resolution: TaskResolution
+  @OneToMany(_ => UserApprovalTaskResolution, resolution => resolution.task)
+  userApprovalResolutions: UserApprovalTaskResolution[]
+
+  @OneToMany(_ => OnDemandTaskResolution, resolution => resolution.task)
+  onDemandResolutions: OnDemandTaskResolution[]
+
+  @OneToMany(_ => DueDateTaskResolution, resolution => resolution.task)
+  dueDateResolutions: DueDateTaskResolution[]
 }

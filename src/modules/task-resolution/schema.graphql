@@ -1,4 +1,4 @@
-# import Error from "../../shared.graphql"
+# import Error, Node from "../shared/schema.graphql"
 # import Task from "../task/schema.graphql"
 # import User from "../user/schema.graphql"
 
@@ -7,25 +7,41 @@ interface ITaskResolution {
   description: String!
   achieved: Boolean!
   task: Task!
+
+  creator: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
-type OnDemandTaskResolution implements ITaskResolution {
+type OnDemandTaskResolution implements ITaskResolution & Node {
   id: ID!
+  creator: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
   description: String!
   achieved: Boolean!
   task: Task!
 }
 
-type UserApprovalTaskResolution implements ITaskResolution {
+type UserApprovalTaskResolution implements ITaskResolution & Node {
   id: ID!
+  creator: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
   description: String!
   achieved: Boolean!
   task: Task!
   approver: User
 }
 
-type DueDateTaskResolution implements ITaskResolution {
+type DueDateTaskResolution implements ITaskResolution & Node {
   id: ID!
+  creator: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
   description: String!
   achieved: Boolean!
   task: Task!
