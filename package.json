@@ -23,6 +23,7 @@
       "@types/ws": "^5.1.1",
       "@types/yup": "^0.24.3",
       "copyfiles": "^2.0.0",
+      "cross-env": "^5.2.0",
       "gql2ts": "^1.8.0",
       "husky": "^0.14.3",
       "jest": "^22.4.3",
@@ -62,25 +63,26 @@
       "yup": "^0.24.1"
    },
    "scripts": {
-      "start": "NODE_ENV=production cd dist/ && node index.js",
-      "dev": "NODE_ENV=development nodemon",
-      "debug": "NODE_ENV=development node -r ts-node/register --inspect ./src/index.ts",
-      "test": "NODE_ENV=test jest --watch",
-      "test-precommit": "NODE_ENV=test jest --forceExit",
-      "test-ci": "NODE_ENV=test jest --ci --forceExit",
-      "test-coverage": "NODE_ENV=test jest --watch --coverage",
-      "lint": "tslint --project . --fix",
+      "start": "cross-env NODE_ENV=production cd dist/ && node index.js",
+      "start:dev": "cross-env NODE_ENV=development nodemon",
+      "start:debug": "cross-env NODE_ENV=development node -r ts-node/register --inspect ./src/index.ts",
+      "test": "cross-env NODE_ENV=test jest --watch",
+      "test:precommit": "cross-env NODE_ENV=test jest --forceExit",
+      "test:ci": "cross-env NODE_ENV=test jest --ci --forceExit",
+      "test:coverage": "cross-env NODE_ENV=test jest --watch --coverage --forceExit",
+      "lint": "tslint --project .",
+      "lint:fix": "tslint --project . --fix",
       "precommit": "lint-staged",
-      "build-ts": "tsc",
-      "postinstall": "yarn run build-ts && yarn copyfiles -u 1 src/modules/shared/shared.graphql src/modules/**/*.graphql dist",
-      "typeorm-cli": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm",
+      "build": "tsc",
+      "postinstall": "yarn run build && yarn copyfiles -u 1 src/modules/shared/shared.graphql src/modules/**/*.graphql dist",
+      "typeorm-ts": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm",
       "gen-schema-types": "ts-node src/scripts/createTypes.ts"
    },
    "lint-staged": {
      "*.ts": [
-      "yarn lint",
       "git add",
-      "yarn test-precommit"
+      "yarn lint:fix",
+      "yarn test:precommit"
      ]
    },
    "jest": {
