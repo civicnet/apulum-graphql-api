@@ -64,6 +64,7 @@
    "scripts": {
       "start": "NODE_ENV=production cd dist/ && node index.js",
       "dev": "NODE_ENV=development nodemon",
+      "debug": "NODE_ENV=development node -r ts-node/register --inspect ./src/index.ts",
       "test": "NODE_ENV=test jest --watch",
       "test-precommit": "NODE_ENV=test jest --forceExit",
       "test-ci": "NODE_ENV=test jest --ci --forceExit",
