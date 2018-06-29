@@ -34,8 +34,8 @@ describe("New account confirmation link", () => {
       redis,
     );
 
-    const response = await fetch(url);
-    expect(response.status).toEqual(200);
+    const response = await fetch(url, { redirect: 'manual' });
+    expect(response.status).toEqual(302);
 
     const user = await User.findOne({ where: { id: userId }});
     expect((user as User).confirmed).toBeTruthy();
@@ -49,7 +49,7 @@ describe("New account confirmation link", () => {
 
   it("cannot confirm bad key", async () => {
     const confirmURL = `${process.env.TEST_HOST}/confirm/1234`;
-    const response = await fetch(confirmURL);
-    expect(response.url === confirmURL).toBeFalsy();
+    const response = await fetch(confirmURL, { redirect: 'manual' });
+    expect(response.status).toEqual(302);
   });
 });
