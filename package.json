@@ -4,7 +4,7 @@
    "license": "MIT",
    "description": "Awesome project developed with TypeORM.",
    "engines": {
-      "node": "10.0.0"
+      "node": ">=8"
    },
    "devDependencies": {
       "@gql2ts/types": "^1.8.0",
