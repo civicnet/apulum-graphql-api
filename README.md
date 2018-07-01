@@ -1,5 +1,5 @@
 [![Heroku](https://badge.glitch.me/karman-graphql-api-prod/heroku)](https://karman-graphql-api-prod.herokuapp.com/)
-[![Build Status](https://travis-ci.com/civictechro/apulum-graphql-api.svg?branch=master)](https://travis-ci.com/civictechro/apulum-graphql-api)
+[![Build Status](https://travis-ci.com/civictechro/apulum-graphql-api.svg?branch=master)](https://travis-ci.com/civictechro/apulum-graphql-api) [![Coverage Status](https://coveralls.io/repos/github/civictechro/apulum-graphql-api/badge.svg?branch=master)](https://coveralls.io/github/civictechro/apulum-graphql-api?branch=master)
 
 # Kármán API
 
