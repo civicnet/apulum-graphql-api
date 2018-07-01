@@ -23,6 +23,7 @@
       "@types/ws": "^5.1.1",
       "@types/yup": "^0.24.3",
       "copyfiles": "^2.0.0",
+      "coveralls": "^3.0.2",
       "cross-env": "^5.2.0",
       "gql2ts": "^1.8.0",
       "husky": "^0.14.3",
@@ -79,11 +80,11 @@
       "gen-schema-types": "ts-node src/scripts/createTypes.ts"
    },
    "lint-staged": {
-     "*.ts": [
-      "git add",
-      "yarn lint:fix",
-      "yarn test:precommit"
-     ]
+      "*.ts": [
+         "git add",
+         "yarn lint:fix",
+         "yarn test:precommit"
+      ]
    },
    "jest": {
       "globalSetup": "./src/testUtils/callSetup.js",
