@@ -1,5 +1,5 @@
 [![Heroku](https://badge.glitch.me/karman-graphql-api-prod/heroku)](https://karman-graphql-api-prod.herokuapp.com/)
-[![Build Status](https://travis-ci.com/civictechro/apulum-graphql-api.svg?branch=master)](https://travis-ci.com/civictechro/apulum-graphql-api) [![Coverage Status](https://coveralls.io/repos/github/civictechro/apulum-graphql-api/badge.svg?branch=master)](https://coveralls.io/github/civictechro/apulum-graphql-api?branch=master)
+[![Build Status](https://travis-ci.com/civictechro/apulum-graphql-api.svg?branch=master)](https://travis-ci.com/civictechro/apulum-graphql-api) [![Coverage Status](https://coveralls.io/repos/github/civictechro/apulum-graphql-api/badge.svg?branch=master)](https://coveralls.io/github/civictechro/apulum-graphql-api?branch=master) [![Total Alerts](https://img.shields.io/lgtm/alerts/g/civictechro/apulum-graphql-api.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/civictechro/apulum-graphql-api/alerts/) [![Language Grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/civictechro/apulum-graphql-api.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/civictechro/apulum-graphql-api/context:javascript)
 
 # Kármán API
 
