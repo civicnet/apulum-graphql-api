@@ -20,7 +20,7 @@ jobs:
 
     - stage: Test start
       node_js: "10"
-      script:  yarn build && yarn start
+      script:  yarn build && yarn start && exit 0
 
     - stage: Produce coverage
       node_js: "10"
