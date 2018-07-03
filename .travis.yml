@@ -20,8 +20,6 @@ jobs:
 
     - stage: Test start
       node_js: "10"
-      env:
-        NODE_ENV=production
       script:  yarn build && yarn start
 
     - stage: Produce coverage
