@@ -64,7 +64,7 @@
       "yup": "^0.24.1"
    },
    "scripts": {
-      "start": "cross-env NODE_ENV=production cd dist/ && node index.js",
+      "start": "cross-env NODE_ENV=production node dist/index.js",
       "start:dev": "cross-env NODE_ENV=development nodemon",
       "start:debug": "cross-env NODE_ENV=development node -r ts-node/register --inspect ./src/index.ts",
       "test": "cross-env NODE_ENV=test jest --watch",
