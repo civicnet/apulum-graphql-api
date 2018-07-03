@@ -7,7 +7,6 @@ services:
 before_script:
   - cp .env_sample .env
   - psql -c 'create database "apulum-graphql-api";' -U postgres
-  - yarn build
 node_js:
   - "10"
 install:
@@ -17,7 +16,11 @@ jobs:
   include:
     - stage: Integration tests
       node_js: "10"
-      script: yarn test:ci
+      script: jest --ci --forceExit
+
+    - stage: Test build
+      node_js: "10"
+      script: yarn build
 
     - stage: Test start
       node_js: "10"
