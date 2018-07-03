@@ -11,12 +11,13 @@ node_js:
   - "10"
 install:
   - yarn
-script:
-  - yarn test:ci
 
 jobs:
   include:
-    - stage: Test Build
+    - stage: Integration tests
+      node_js: "10"
+      script: yarn test:ci
+    - stage: Test Start
       node_js: "10"
       env:
         - NODE_ENV=production
