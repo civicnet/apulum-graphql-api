@@ -1,6 +1,7 @@
 {
   "name": "apulum-graphql-api",
   "scripts": {
+    "postdeploy": "yarn build"
   },
   "env": {
     "DB_DATABASE": {

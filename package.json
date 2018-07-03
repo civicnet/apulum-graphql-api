@@ -24,7 +24,6 @@
       "@types/yup": "^0.24.3",
       "copyfiles": "^2.0.0",
       "coveralls": "^3.0.2",
-      "cross-env": "^5.2.0",
       "gql2ts": "^1.8.0",
       "husky": "^0.14.3",
       "jest": "^22.4.3",
@@ -44,6 +43,7 @@
       "bcryptjs": "^2.4.3",
       "casual": "^1.5.19",
       "connect-redis": "^3.3.3",
+      "cross-env": "^5.2.0",
       "dotenv": "^5.0.1",
       "express": "^4.16.3",
       "express-rate-limit": "^2.11.0",
@@ -64,7 +64,7 @@
       "yup": "^0.24.1"
    },
    "scripts": {
-      "start": "cd dist/ && node index.js",
+      "start": "cross-env NODE_ENV=production cd dist/ && node index.js",
       "start:dev": "cross-env NODE_ENV=development nodemon",
       "start:debug": "cross-env NODE_ENV=development node -r ts-node/register --inspect ./src/index.ts",
       "test": "cross-env NODE_ENV=test jest --watch",
@@ -74,8 +74,8 @@
       "lint": "tslint --project .",
       "lint:fix": "tslint --project . --fix",
       "precommit": "lint-staged",
-      "build": "tsc",
-      "postinstall": "yarn run build && yarn copyfiles -u 1 src/modules/shared/shared.graphql src/modules/**/*.graphql dist",
+      "build": "yarn run build:ts && yarn copyfiles -u 1 src/modules/shared/shared.graphql src/modules/**/*.graphql dist",
+      "build:ts": "tsc",
       "typeorm-ts": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm",
       "gen-schema-types": "ts-node src/scripts/createTypes.ts"
    },
