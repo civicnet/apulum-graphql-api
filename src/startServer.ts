@@ -90,11 +90,20 @@ export const startServer = async () => {
   }
 
   const port = process.env.PORT || 4000;
-  const app = await server.start({
+
+  const app = server.start({
     cors,
     port: process.env.NODE_ENV === 'test' ? 0 : port
+  })
+
+  await app.then(() => {
+    console.log('Server is running on localhost:' + port);
+
+    if (process.env.TEST_ENVIRONMENT === 'travis') {
+      console.log('Detected Travis environment, shutting down...');
+      process.exit();
+    }
   });
 
-  console.log('Server is running on localhost:' + port);
   return app;
 }

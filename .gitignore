@@ -8,3 +8,4 @@ temp/
 .env
 coverage/
 dist/
+bin

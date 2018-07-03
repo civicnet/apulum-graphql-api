@@ -18,9 +18,11 @@ jobs:
       node_js: "10"
       script: jest --ci --forceExit
 
-    - stage: Test start
+    - stage: Test build and start
       node_js: "10"
-      script:  yarn build && yarn start && exit 0
+      env:
+        TEST_ENVIRONMENT=travis
+      script:  yarn build && yarn start:travis
 
     - stage: Produce coverage
       node_js: "10"

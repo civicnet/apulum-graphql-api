@@ -66,9 +66,10 @@
    "scripts": {
       "start": "cross-env NODE_ENV=production node dist/index.js",
       "start:dev": "cross-env NODE_ENV=development nodemon",
+      "start:travis": "cross-env TEST_ENVIRONMENT=travis yarn start",
       "start:debug": "cross-env NODE_ENV=development node -r ts-node/register --inspect ./src/index.ts",
       "test": "cross-env NODE_ENV=test jest --watch",
-      "test:precommit": "cross-env NODE_ENV=test jest --forceExit",
+      "test:precommit": "cross-env NODE_ENV=test jest --forceExit --passWithNoTests",
       "test:ci": "cross-env NODE_ENV=test jest --ci --forceExit",
       "test:coverage": "cross-env NODE_ENV=test jest --watch --coverage --forceExit",
       "lint": "tslint --project .",
