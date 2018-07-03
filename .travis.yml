@@ -7,21 +7,24 @@ services:
 before_script:
   - cp .env_sample .env
   - psql -c 'create database "apulum-graphql-api";' -U postgres
+  - yarn build
 node_js:
   - "10"
 install:
-  - yarn && yarn test:ci
+  - yarn
 
 jobs:
   include:
-    - stage: Test build
+    - stage: Integration tests
       node_js: "10"
-      script: yarn build
+      script: yarn test:ci
+
     - stage: Test start
       node_js: "10"
       env:
         NODE_ENV=production
       script: yarn start
+
     - stage: Produce coverage
       node_js: "10"
       script: jest --coverage --forceExit && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
