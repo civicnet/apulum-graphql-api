@@ -74,8 +74,9 @@
       "lint": "tslint --project .",
       "lint:fix": "tslint --project . --fix",
       "precommit": "lint-staged",
-      "build": "yarn run build:ts && yarn copyfiles -u 1 src/modules/shared/shared.graphql src/modules/**/*.graphql dist",
+      "build": "yarn run build:ts && yarn run build:graphql",
       "build:ts": "tsc",
+      "build:graphql": "yarn copyfiles -u 1 src/modules/shared/shared.graphql src/modules/**/*.graphql dist",
       "typeorm-ts": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm",
       "gen-schema-types": "ts-node src/scripts/createTypes.ts"
    },
