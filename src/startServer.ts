@@ -34,7 +34,13 @@ export const startServer = async () => {
     }
   });
 
-  await createTypeormConn();
+  if (process.env.NODE_ENV === 'test') {
+    await createTypeormConn({
+      resetDB: true,
+    });
+  } else {
+    await createTypeormConn();
+  }
 
   if (process.env.NODE_ENV === 'production') {
     server.express.use(
