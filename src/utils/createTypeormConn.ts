@@ -75,6 +75,7 @@ export const createTypeormConn = async (
 
   if (process.env.DB_DEBUG) {
     console.log(process.env.DB_SYNC);
+    console.log(connectionOptions);
   }
 
   return createConnection(connectionOptions as any);
