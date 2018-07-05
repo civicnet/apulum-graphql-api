@@ -28,12 +28,6 @@ jobs:
       node_js: 10
       script:  yarn test:ci
 
-    - stage: Test build and start
-      node_js: 10
-      env:
-        TEST_ENVIRONMENT=travis
-      script:  yarn build && yarn start:travis
-
     - stage: Produce coverage
       node_js: 10
       script: jest --coverage --forceExit && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
