@@ -60,5 +60,8 @@ export const createTypeormConn = async (
     }
   }
 
+  if (process.env.DB_DEBUG === 'true') {
+    console.log(connectionOptions);
+  }
   return createConnection(connectionOptions);
 }
