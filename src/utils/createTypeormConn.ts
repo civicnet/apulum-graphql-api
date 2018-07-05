@@ -3,17 +3,19 @@ import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConne
 
 export const createTypeormConn = async (
   options: {
-    resetDB: boolean
-  } = { resetDB: false }
+    reset: boolean,
+    sync: boolean,
+    debug: boolean,
+  } = { reset: false, sync: false, debug: false }
 ) => {
   // const connectionOptions = await getConnectionOptions(process.env.NODE_ENV);
 
   let connectionOptions: PostgresConnectionOptions = {
     name: "default",
     type: "postgres",
-    logging: process.env.DB_DEBUG === 'true',
-    synchronize: options.resetDB,
-    dropSchema: options.resetDB,
+    logging: options.debug,
+    synchronize: options.sync,
+    dropSchema: options.reset,
   };
 
   if (process.env.NODE_ENV !== 'production') {

@@ -81,11 +81,15 @@ export const startServer = async () => {
 
   if (process.env.NODE_ENV === "test") {
     await createTypeormConn({
-      resetDB: true,
+      reset: true,
+      sync: true,
+      debug: false,
     });
   } else {
     await createTypeormConn({
-      resetDB: process.env.RESET_DB === 'true'
+      reset: process.env.RESET_DB === 'true',
+      sync: process.env.SYNC_DB === 'true',
+      debug: process.env.DEBUG_DB === 'true'
     });
   }
 
