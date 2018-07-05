@@ -46,19 +46,14 @@ export const createTypeormConn = async (
       ...connectionOptions,
       url: process.env.DATABASE_URL,
       entities: [
-        "entity/**/*.js"
+        "../entity/**/*.js"
       ],
       migrations: [
-        "migration/**/*.js"
+        "../migration/**/*.js"
       ],
       subscribers: [
-        "subscriber/**/*.js"
+        "../subscriber/**/*.js"
       ],
-      cli: {
-        "entitiesDir": "entity",
-        "migrationsDir": "migration",
-        "subscribersDir": "subscriber"
-      }
     }
   }
 
