@@ -1,5 +1,12 @@
 import { createConnection } from "typeorm";
 import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
+import { DueDateTaskResolution } from "../entity/DueDateTaskResolution";
+import { IncidentReport } from "../entity/IncidentReport";
+import { IncidentReportComment } from "../entity/IncidentReportComment";
+import { OnDemandTaskResolution } from "../entity/OnDemandTaskResolution";
+import { Task } from "../entity/Task";
+import { User } from "../entity/User";
+import { UserApprovalTaskResolution } from "../entity/UserApprovalTaskResolution";
 
 export const createTypeormConn = async (
   options: {
@@ -8,14 +15,21 @@ export const createTypeormConn = async (
     debug: boolean,
   } = { reset: false, sync: false, debug: false }
 ) => {
-  // const connectionOptions = await getConnectionOptions(process.env.NODE_ENV);
-
   let connectionOptions: PostgresConnectionOptions = {
     name: "default",
     type: "postgres",
     logging: options.debug,
     synchronize: options.sync,
     dropSchema: options.reset,
+    entities: [
+      DueDateTaskResolution,
+      IncidentReport,
+      IncidentReportComment,
+      OnDemandTaskResolution,
+      Task,
+      User,
+      UserApprovalTaskResolution
+    ],
   };
 
   if (process.env.NODE_ENV !== 'production') {
@@ -26,9 +40,6 @@ export const createTypeormConn = async (
       database: process.env.DB_DATABASE,
       port: Number(process.env.DB_PORT),
       host: process.env.DB_HOST,
-      entities: [
-        "src/entity/**/*.ts"
-      ],
       migrations: [
         "src/migration/**/*.ts"
       ],
@@ -45,9 +56,6 @@ export const createTypeormConn = async (
     connectionOptions = {
       ...connectionOptions,
       url: process.env.DATABASE_URL,
-      entities: [
-        "../entity/**/*.js"
-      ],
       migrations: [
         "../migration/**/*.js"
       ],
