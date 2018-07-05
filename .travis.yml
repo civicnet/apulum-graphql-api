@@ -16,7 +16,7 @@ jobs:
   include:
     - stage: Integration tests
       node_js: "10"
-      script: jest --ci --forceExit
+      script: yarn test:ci
 
     - stage: Test build and start
       node_js: "10"
