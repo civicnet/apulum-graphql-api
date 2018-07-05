@@ -18,7 +18,6 @@ env:
   DB_PASSWORD=
   DB_DATABASE=apulum-graphql-api
   DB_TEST_DATABASE=apulum-graphql-api-test
-
   DB_SYNC=true
   DB_DROP_SCHEMA=true
   DB_DEBUG=false
