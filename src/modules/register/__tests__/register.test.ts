@@ -16,7 +16,7 @@ let conn: Connection;
 let client: TestClient;
 
 beforeAll(async () => {
- conn = await createTypeormConn();
+ conn = await createTypeormConn({ resetDB: true });
  client = new TestClient(
    process.env.TEST_HOST as string
  );

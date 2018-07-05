@@ -85,7 +85,7 @@ export const startServer = async () => {
     });
   } else {
     await createTypeormConn({
-      resetDB: Boolean(process.env.RESET_DB)
+      resetDB: false,
     });
   }
 
