@@ -11,13 +11,11 @@ node_js:
   - "10"
 install:
   - yarn
+script:
+  - jest --ci --forceExit
 
 jobs:
   include:
-    - stage: Integration tests
-      node_js: "10"
-      script: jest --ci --forceExit
-
     - stage: Test build and start
       node_js: "10"
       env:

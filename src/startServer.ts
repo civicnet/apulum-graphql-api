@@ -62,7 +62,7 @@ export const startServer = async () => {
       saveUninitialized: false,
       cookie: {
         httpOnly: false,
-        secure: false, // process.env.NODE_ENV === "production",
+        secure: process.env.NODE_ENV === "production",
         maxAge: 1000 * 60 * 60 * 24 * 7
       }
     })
@@ -88,7 +88,9 @@ export const startServer = async () => {
   const port = process.env.PORT || 4000;
   const app = server.start({
     cors,
-    port: process.env.NODE_ENV === 'test' ? 0 : port
+    port: process.env.NODE_ENV === 'test'
+      ? 0
+      : process.env.PORT || 4000
   })
 
   await app.then(() => {
