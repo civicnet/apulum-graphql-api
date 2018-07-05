@@ -1,27 +1,64 @@
-import { createConnection, getConnectionOptions } from "typeorm";
+import { createConnection } from "typeorm";
+import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
 
 export const createTypeormConn = async (
   options: {
     resetDB: boolean
   } = { resetDB: false }
 ) => {
-  const connectionOptions = await getConnectionOptions(process.env.NODE_ENV);
+  // const connectionOptions = await getConnectionOptions(process.env.NODE_ENV);
 
-  if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
-    Object.assign(connectionOptions, {
-      host: process.env.DB_HOST,
-      port: process.env.DB_PORT,
+  let connectionOptions: PostgresConnectionOptions = {
+    name: "default",
+    type: "postgres",
+    logging: process.env.DB_DEBUG === 'true',
+    synchronize: options.resetDB,
+    dropSchema: options.resetDB,
+  };
+
+  if (process.env.NODE_ENV !== 'production') {
+    connectionOptions = {
+      ...connectionOptions,
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      logging: process.env.DB_DEBUG,
-    });
+      port: Number(process.env.DB_PORT),
+      host: process.env.DB_HOST,
+      entities: [
+        "src/entity/**/*.ts"
+      ],
+      migrations: [
+        "src/migration/**/*.ts"
+      ],
+      subscribers: [
+        "src/subscriber/**/*.ts"
+      ],
+      cli: {
+        "entitiesDir": "src/entity",
+        "migrationsDir": "src/migration",
+        "subscribersDir": "src/subscriber"
+      }
+    };
+  } else {
+    connectionOptions = {
+      ...connectionOptions,
+      url: process.env.DATABASE_URL,
+      entities: [
+        "entity/**/*.js"
+      ],
+      migrations: [
+        "migration/**/*.js"
+      ],
+      subscribers: [
+        "subscriber/**/*.js"
+      ],
+      cli: {
+        "entitiesDir": "entity",
+        "migrationsDir": "migration",
+        "subscribersDir": "subscriber"
+      }
+    }
   }
 
-  return createConnection({
-    ...connectionOptions,
-    name: "default",
-    synchronize: options.resetDB,
-    dropSchema: options.resetDB,
-  });
+  return createConnection(connectionOptions);
 }
