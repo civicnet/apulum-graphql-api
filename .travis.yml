@@ -21,7 +21,6 @@ env:
   DB_SYNC=true
   DB_DROP_SCHEMA=true
   DB_DEBUG=false
-  TEST_ENVIRONMENT=travis
 
 jobs:
   include:
@@ -31,6 +30,8 @@ jobs:
 
     - stage: Test build and start
       node_js: 10
+      env:
+        TEST_ENVIRONMENT=travis
       script:  yarn build && yarn start:travis
 
     - stage: Produce coverage
