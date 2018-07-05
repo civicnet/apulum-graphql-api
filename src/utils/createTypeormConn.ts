@@ -1,5 +1,9 @@
 import { createConnection } from "typeorm";
 
+const isSet = (variable?: string) => {
+  return variable === 'true';
+}
+
 export const createTypeormConn = async (
   options: {
     resetDB: boolean
@@ -15,7 +19,7 @@ export const createTypeormConn = async (
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database,
-    logging: !!process.env.DB_DEBUG,
+    logging: isSet(process.env.DB_DEBUG),
   };
 
   let schemaFiles = {
@@ -66,15 +70,16 @@ export const createTypeormConn = async (
   const connectionOptions = {
     name: "default",
     type: "postgres",
-    synchronize: !!process.env.DB_SYNC,
-    dropSchema: options.resetDB ? options.resetDB : !!process.env.DB_DROP_SCHEMA,
+    synchronize: isSet(process.env.DB_SYNC),
+    dropSchema: options.resetDB
+      ? options.resetDB
+      : isSet(process.env.DB_DROP_SCHEMA),
     ...databaseCredentials,
     ...schemaFiles,
     cli: cliDirs
   };
 
-  if (process.env.DB_DEBUG) {
-    console.log(process.env.DB_SYNC);
+  if (isSet(process.env.DB_DEBUG)) {
     console.log(connectionOptions);
   }
 

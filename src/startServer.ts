@@ -34,14 +34,6 @@ export const startServer = async () => {
     }
   });
 
-  if (process.env.NODE_ENV === 'test') {
-    await createTypeormConn({
-      resetDB: true,
-    });
-  } else {
-    await createTypeormConn();
-  }
-
   if (process.env.NODE_ENV === 'production') {
     server.express.use(
       new RateLimit({
@@ -77,6 +69,14 @@ export const startServer = async () => {
   );
 
   server.express.get('/confirm/:id', confirmEmail);
+
+  if (process.env.NODE_ENV === 'test') {
+    await createTypeormConn({
+      resetDB: true,
+    });
+  } else {
+    await createTypeormConn();
+  }
 
   const cors = {
     credentials: true,
