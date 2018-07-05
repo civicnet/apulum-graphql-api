@@ -45,8 +45,10 @@ export const startServer = async () => {
         })
       })
     );
+  }
 
-    // For Heroku
+  // For Heroku
+  if (process.env.NODE_ENV === 'production') {
     server.express.set('trust proxy', 1);
   }
 
@@ -68,16 +70,6 @@ export const startServer = async () => {
     })
   );
 
-  server.express.get('/confirm/:id', confirmEmail);
-
-  if (process.env.NODE_ENV === 'test') {
-    await createTypeormConn({
-      resetDB: true,
-    });
-  } else {
-    await createTypeormConn();
-  }
-
   const cors = {
     credentials: true,
     origin: process.env.NODE_ENV === "test"
@@ -85,7 +77,24 @@ export const startServer = async () => {
       : (process.env.FRONTEND_HOST as string)
   };
 
+  server.express.get('/confirm/:id', confirmEmail);
+
+  if (process.env.NODE_ENV === "test") {
+    await createTypeormConn({
+      reset: true,
+      sync: true,
+      debug: false,
+    });
+  } else {
+    await createTypeormConn({
+      reset: process.env.RESET_DB === 'true',
+      sync: process.env.SYNC_DB === 'true',
+      debug: process.env.DEBUG_DB === 'true'
+    });
+  }
+
   const port = process.env.PORT || 4000;
+
   const app = server.start({
     cors,
     port: process.env.NODE_ENV === 'test' ? 0 : port

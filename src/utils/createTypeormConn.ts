@@ -1,87 +1,72 @@
 import { createConnection } from "typeorm";
-
-const isSet = (variable?: string) => {
-  return variable === 'true';
-}
+import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
+import { DueDateTaskResolution } from "../entity/DueDateTaskResolution";
+import { IncidentReport } from "../entity/IncidentReport";
+import { IncidentReportComment } from "../entity/IncidentReportComment";
+import { OnDemandTaskResolution } from "../entity/OnDemandTaskResolution";
+import { Task } from "../entity/Task";
+import { User } from "../entity/User";
+import { UserApprovalTaskResolution } from "../entity/UserApprovalTaskResolution";
 
 export const createTypeormConn = async (
   options: {
-    resetDB: boolean
-  } = { resetDB: true }
+    reset: boolean,
+    sync: boolean,
+    debug: boolean,
+  } = { reset: false, sync: false, debug: false }
 ) => {
-  const database = process.env.NODE_ENV !== 'test'
-    ? process.env.DB_DATABASE
-    : process.env.DB_TEST_DATABASE;
-
-  let databaseCredentials: {} = {
-    host: process.env.DB_HOST,
-    port: Number(process.env.DB_PORT),
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database,
-    logging: isSet(process.env.DB_DEBUG),
-  };
-
-  let schemaFiles = {
-    entities: [
-      "src/entity/**/*.ts"
-    ],
-    migrations: [
-      "src/migration/**/*.ts"
-    ],
-    subscribers: [
-      "src/subscriber/**/*.ts"
-    ],
-  };
-
-  let cliDirs = {
-    "entitiesDir": "src/entity",
-    "migrationsDir": "src/migration",
-    "subscribersDir": "src/subscriber"
-  };
-
-  if (process.env.NODE_ENV === 'production') {
-    // Heroku periodically rotates the credentials
-    // and updates the DATABASE_URL, use that instead
-    databaseCredentials = {
-      url: process.env.DATABASE_URL,
-    }
-
-    // Production code runs on node so we use the transpiled code
-    schemaFiles = {
-      entities: [
-        "entity/**/*.js"
-      ],
-      migrations: [
-        "migration/**/*.js"
-      ],
-      subscribers: [
-        "subscriber/**/*.js"
-      ],
-    }
-
-    cliDirs = {
-      "entitiesDir": "entity",
-      "migrationsDir": "migration",
-      "subscribersDir": "subscriber"
-    };
-  }
-
-  const connectionOptions = {
+  let connectionOptions: PostgresConnectionOptions = {
     name: "default",
     type: "postgres",
-    synchronize: isSet(process.env.DB_SYNC),
-    dropSchema: options.resetDB
-      ? options.resetDB
-      : isSet(process.env.DB_DROP_SCHEMA),
-    ...databaseCredentials,
-    ...schemaFiles,
-    cli: cliDirs
+    logging: options.debug,
+    synchronize: options.sync,
+    dropSchema: options.reset,
+    entities: [
+      DueDateTaskResolution,
+      IncidentReport,
+      IncidentReportComment,
+      OnDemandTaskResolution,
+      Task,
+      User,
+      UserApprovalTaskResolution
+    ],
   };
 
-  if (isSet(process.env.DB_DEBUG)) {
-    console.log(connectionOptions);
+  if (process.env.NODE_ENV !== 'production') {
+    connectionOptions = {
+      ...connectionOptions,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
+      port: Number(process.env.DB_PORT),
+      host: process.env.DB_HOST,
+      migrations: [
+        "src/migration/**/*.ts"
+      ],
+      subscribers: [
+        "src/subscriber/**/*.ts"
+      ],
+      cli: {
+        "entitiesDir": "src/entity",
+        "migrationsDir": "src/migration",
+        "subscribersDir": "src/subscriber"
+      }
+    };
+  } else {
+    connectionOptions = {
+      ...connectionOptions,
+      url: process.env.DATABASE_URL,
+      migrations: [
+        "../migration/**/*.js"
+      ],
+      subscribers: [
+        "../subscriber/**/*.js"
+      ],
+    }
   }
 
-  return createConnection(connectionOptions as any);
+  if (process.env.DB_DEBUG === 'true') {
+    console.log(connectionOptions);
+  }
+  return createConnection(connectionOptions);
 }

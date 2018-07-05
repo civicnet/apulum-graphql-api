@@ -115,10 +115,6 @@ DB_PORT=GET_THIS_FROM_DATABASE_URL
 DB_USERNAME=GET_THIS_FROM_DATABASE_URL
 DB_PASSWORD=GET_THIS_FROM_DATABASE_URL
 DB_DATABASE=GET_THIS_FROM_DATABASE_URL
-
-# Database debug options
-DB_SYNC=BOOLEAN
-DB_DROP_SCHEMA=BOOLEAN
 ```
 
 And you should be set! 
@@ -129,17 +125,14 @@ Deploying somewhere else (AWS, DigitalOcean, toaster) will be a similar process 
 
 
 **Install postgres and redis**
-
 You can also use a remotely-hosted version of these two, if that's what you prefer.
 
 **Environment variables**
-
 Configuration options are set in environment variables. By default we support `.env` so you can just copy the Heroku variables list above and you're good to go.
 
 Note that you won't need `SENDGRID_PASSWORD` and `SENDGRID_USERNAME`, just an API key. Get that from their site. If you installed redis locally, you won't need to add the `REDIS_URL` variable.
 
 **Build and run**
-
 Last step, building and running the project. 
 
 ```
@@ -152,7 +145,6 @@ The postinstall step builds the `.ts` files and copies static assets (`*.graphql
 Depending on your workflow, you should be able to use this to deploy. Please feel free to write automation for this. 
 
 **Known issues**
-
 ```
 (node:21536) UnhandledPromiseRejectionWarning: QueryFailedError: function uuid_generate_v4() does not exist
 
@@ -167,7 +159,7 @@ CREATE EXTENSION
 apulum-graphql-api=# \q
 ```
 
-Error running `tsc` or `yarn run build:ts`:
+Error running `tsc` or `yarn run build-ts`:
 
 ```
 src/types/schema.d.ts(147,2): error TS1036: Statements are not allowed in ambient contexts.
