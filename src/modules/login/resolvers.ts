@@ -7,7 +7,7 @@ import { invalidLogin, confirmEmailError, forgotPasswordLocked } from "./errorMe
 import { userSessionIDPrefix } from '../../constants';
 
 const errorResponse = [{
-  path: 'login',
+  path: 'email',
   message: invalidLogin,
 }];
 
@@ -25,14 +25,14 @@ export const resolvers: ResolverMap = {
 
       if (!user.confirmed) {
         return [{
-          path: 'login',
+          path: 'email',
           message: confirmEmailError
         }]
       }
 
       if (user.forgotPasswordLocked) {
         return [{
-          path: 'login',
+          path: 'password',
           message: forgotPasswordLocked
         }];
       }
