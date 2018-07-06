@@ -49,7 +49,7 @@ describe('Forgot password test', () => {
     expect(await client.login(email, password)).toEqual({
       data: {
         login: [{
-          path: 'login',
+          path: 'password',
           message: forgotPasswordLocked
         }]
       }

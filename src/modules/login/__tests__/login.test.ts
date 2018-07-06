@@ -34,7 +34,7 @@ describe("Login user", () => {
     expect(response.data).toEqual({
       login: [
         {
-          path: 'login',
+          path: 'email',
           message: invalidLogin
         }
       ]
@@ -50,7 +50,7 @@ describe("Login user", () => {
 
     expect(response.data).toEqual({
       login: [{
-        path: 'login',
+        path: 'email',
         message: confirmEmailError
       }]
     });
@@ -78,7 +78,7 @@ describe("Login user", () => {
     expect(response.data).toEqual({
       login: [
         {
-          path: 'login',
+          path: 'email',
           message: invalidLogin
         }
       ]
