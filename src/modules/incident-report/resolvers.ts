@@ -12,9 +12,11 @@ import { IncidentReportComment } from "../../entity/IncidentReportComment";
 const inputSchema = yup.object().shape({
   description: yup
     .string()
+    .min(5)
     .required(),
   title: yup
     .string()
+    .min(3)
     .max(256)
     .required(),
   latitude: yup
