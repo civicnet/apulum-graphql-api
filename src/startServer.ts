@@ -98,7 +98,7 @@ export const startServer = async () => {
   const app = server.start({
     cors,
     port: process.env.NODE_ENV === 'test' ? 0 : port
-  })
+  });
 
   await app.then(() => {
     console.log('Server is running on localhost:' + port);
