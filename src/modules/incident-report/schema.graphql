@@ -63,7 +63,6 @@ type IncidentReport implements Node {
 """
 We use the same input for both updates and creations of incident reports so the only mandatory field
 is userId. For the rest, it depends on the mutation being performed.
-
 TODO: Group latitude and longitude into a separate mandatory input. There is no use case for updating
 just the longitude or the latitude.
 """
@@ -93,6 +92,10 @@ input IncidentReportCommentInput {
   incidentReportID: ID!
   comment: String
   statusChange: IncidentReportStatusChangeInput
+}
+
+input IncidentReportFilterInput {
+  status: [IncidentReportStatus!]
 }
 
 union MaybeIncidentReportComment = IncidentReportComment | Error
@@ -144,5 +147,9 @@ type Query {
   incidentReportComment(
     id: ID!
   ): IncidentReportComment
+
+  filterIncidentReports(
+    input: IncidentReportFilterInput!
+  ): [IncidentReport!]
 }
 

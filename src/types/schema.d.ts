@@ -43,6 +43,7 @@ declare namespace GQL {
      * Query for a single incident report comment
      */
     incidentReportComment: IIncidentReportComment | null;
+    filterIncidentReports: Array<IIncidentReport>;
     bye2: string | null;
     dummy: string | null;
     me: IUser | null;
@@ -71,6 +72,10 @@ declare namespace GQL {
 
   interface IIncidentReportCommentOnQueryArguments {
     id: string;
+  }
+
+  interface IFilterIncidentReportsOnQueryArguments {
+    input: IIncidentReportFilterInput;
   }
 
   interface ITaskOnQueryArguments {
@@ -215,6 +220,10 @@ declare namespace GQL {
      */
     oldStatus: IncidentReportStatus | null;
     newStatus: IncidentReportStatus | null;
+  }
+
+  interface IIncidentReportFilterInput {
+    status: Array<IncidentReportStatus>;
   }
 
   interface ITask {
@@ -372,7 +381,6 @@ declare namespace GQL {
   /**
    * We use the same input for both updates and creations of incident reports so the only mandatory field
    * is userId. For the rest, it depends on the mutation being performed.
-   *
    * TODO: Group latitude and longitude into a separate mandatory input. There is no use case for updating
    * just the longitude or the latitude.
    */
@@ -397,7 +405,7 @@ declare namespace GQL {
   }
 
   /**
-   * Creating a new comment should contain other a text comment, or a status change, or both.
+   * Creating a new comment should contain either a text comment, or a status change, or both.
    */
   interface IIncidentReportCommentInput {
     userID: string;

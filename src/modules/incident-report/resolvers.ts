@@ -67,6 +67,15 @@ export const resolvers: ResolverMap = {
         where: { id },
       });
     },
+    filterIncidentReports: async (
+      _,
+      { input }: GQL.IFilterIncidentReportsOnQueryArguments
+    ) => {
+      return getRepository(IncidentReport)
+        .createQueryBuilder('incidentReport')
+        .where('status = ANY(:status)', { status: input.status })
+        .getMany();
+    },
     commentsForIncidentReport: async (
       _,
       { incidentReportID }: GQL.ICommentsForIncidentReportOnQueryArguments
