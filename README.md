@@ -159,6 +159,8 @@ CREATE EXTENSION
 apulum-graphql-api=# \q
 ```
 
+Note that you probably will need to install the extension for the test db as well.
+
 Error running `tsc` or `yarn run build-ts`:
 
 ```
