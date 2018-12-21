@@ -52,7 +52,7 @@
       "graphql-import": "^0.5.2",
       "graphql-request": "^1.6.0",
       "graphql-tools": "^3.0.1",
-      "graphql-yoga": "^1.14.10",
+      "graphql-yoga": "^1.16.9",
       "ioredis": "^3.2.2",
       "node-fetch": "^2.1.2",
       "pg": "^7.3.0",
