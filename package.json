@@ -59,7 +59,7 @@
       "rate-limit-redis": "^1.5.0",
       "reflect-metadata": "^0.1.10",
       "request-promise": "^4.2.2",
-      "typeorm": "0.2.5",
+      "typeorm": "0.2.10",
       "uuid": "^3.2.1",
       "yup": "^0.24.1"
    },
